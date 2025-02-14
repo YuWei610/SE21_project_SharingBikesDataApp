@@ -1,0 +1,6 @@
+
+EC2 SSH : ec2-13-60-195-12.eu-north-1.compute.amazonaws.com
+RDS endpoint : database-download-jc-decaux.ch4ms280gb0s.eu-north-1.rds.amazonaws.com
+
+Workbench
+my_local_connection : username = roser, password = betty766
