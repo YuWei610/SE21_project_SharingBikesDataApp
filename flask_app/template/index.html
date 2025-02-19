@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Flask 中的 Google 地图</title>
+    <!-- 加载 Google Maps API，传入 API Key 和回调函数 -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+    <script>
+      // 地图初始化回调函数
+      function initMap() {
+        // 示例坐标：纽约市
+        var myLatLng = {lat: 40.7128, lng: -74.0060};
+
+        // 创建地图对象
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: myLatLng
+        });
+
+        // 在地图上添加一个标记
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'Hello, New York!'
+        });
+      }
+    </script>
+</head>
+<body>
+    <h1>我的 Google 地图</h1>
+    <!-- 地图容器 -->
+    <div id="map" style="height: 500px; width: 600px;"></div>
+</body>
+</html>
