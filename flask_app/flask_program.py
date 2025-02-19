@@ -24,4 +24,4 @@ def main():
 
 if __name__ == "__main__":
     # app.run(debug=True)
-    app.run(host="172.31.44.41", port=5000)
+    app.run(host="ec2-46-137-24-75.eu-west-1.compute.amazonaws.com", port=5000)
