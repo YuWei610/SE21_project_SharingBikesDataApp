@@ -3,7 +3,7 @@ import traceback
 import datetime
 import time
 import os
-import dbinfo
+import project_precondition.api_scrape.api_config as api_config
 import json
 from sqlalchemy import create_engine 
 
@@ -33,7 +33,7 @@ def stations_to_db(text):
 
 def main():
     try:
-        r = requests.get(dbinfo.STATIONS_URI, params={"apiKey": dbinfo.API_KEY, "contract": dbinfo.NAME})
+        r = requests.get(api_config.STATIONS_URI, params={"apiKey": api_config.API_KEY, "contract": api_config.NAME})
         stations_to_db(r.text)
         time.sleep(5*60) # NOTE: if you are downloading static station data only, you need to do this just once!
     except:

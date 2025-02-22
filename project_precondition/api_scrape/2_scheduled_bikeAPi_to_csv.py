@@ -4,7 +4,7 @@ import traceback
 import datetime
 import time
 import os
-import dbinfo
+import project_precondition.api_scrape.api_config as api_config
 
 """
 Data are in dbinfo.py
@@ -41,7 +41,7 @@ def main():
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             }
             # r = requests.get(dbinfo.STATIONS_URI, params={"apiKey": dbinfo.Rose, "contract": dbinfo.NAME})
-            r = requests.get(dbinfo.STATIONS_URI, params={"apiKey": dbinfo.API_KEY, "contract": dbinfo.NAME}, headers=headers)
+            r = requests.get(api_config.STATIONS_URI, params={"apiKey": api_config.API_KEY, "contract": api_config.NAME}, headers=headers)
             print(r)
             write_to_file(r.text)
             time.sleep(5*60)

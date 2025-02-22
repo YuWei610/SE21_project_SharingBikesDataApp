@@ -17,7 +17,6 @@ sys.path.append(project_path)
 import api_config
 
 
-
 """
 Data are in dbinfo.py
 CKEY = "...."
@@ -30,7 +29,7 @@ def main():
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         }
-        r = requests.get(api_config.API_CONFIG["stations"]["stations_url"], params={"apiKey": api_config.API_CONFIG["stations"]["apiKey"], "contract": api_config.API_CONFIG["stations"]["contract"]}, headers=headers)
+        r = requests.get(api_config.API_CONFIG["single_station"]["single_station_url"], params={"apiKey": api_config.API_CONFIG["single_station"]["apiKey"], "contract": api_config.API_CONFIG["single_station"]["contract"]}, headers=headers)
         print(r)
         data = r.json() 
         print(type(data))
@@ -38,32 +37,32 @@ def main():
         print(data)
         
 
-        # change data format to DataFrame
-        df = pd.DataFrame(data)
+        # 轉換成 DataFrame
+        # df = pd.DataFrame(data)
 
-        df["lat"] = df["position"].apply(lambda x: x["lat"])
-        df["lng"] = df["position"].apply(lambda x: x["lng"])
+        # df["lat"] = df["position"].apply(lambda x: x["lat"])
+        # df["lng"] = df["position"].apply(lambda x: x["lng"])
 
-        # remove the original position column
-        df = df.drop(columns=["position"])
+        # # 移除原始的 position 欄位
+        # df = df.drop(columns=["position"])
 
-        # I first need to create a folder data where the files will be stored.
-        if not os.path.exists('data'):
-            os.mkdir('data')
-            print("Folder 'data' created!")
-        else:
-            print("Folder 'data' already exists.")
+        # # I first need to create a folder data where the files will be stored.
+        # if not os.path.exists('data'):
+        #     os.mkdir('data')
+        #     print("Folder 'data' created!")
+        # else:
+        #     print("Folder 'data' already exists.")
 
-        # now is a variable from datetime, which will go in {}.
-        # replace is replacing white spaces with underscores in the file names
-        now = datetime.datetime.now()
-        df.to_csv("data/bikes_{}.csv".format(now).replace(" ", "_"))
+        # # now is a variable from datetime, which will go in {}.
+        # # replace is replacing white spaces with underscores in the file names
+        # now = datetime.datetime.now()
+        # df.to_csv("data/bikes_{}.csv".format(now).replace(" ", "_"))
 
-        # check columns
-        print(df.columns)
+        # # 查看欄位
+        # print(df.columns)
 
-        # check fist row of data
-        print(df.head(1))
+        # 看前 5 筆資料
+        # print(df.head())
 
 
     except:

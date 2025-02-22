@@ -3,7 +3,7 @@ import traceback
 import datetime
 import time
 import os
-import dbinfo
+import api_config
 import json
 import sqlalchemy as sqla
 from sqlalchemy import create_engine, text  # 確保正確匯入 text
@@ -74,7 +74,16 @@ def main():
     engine = create_engine(connection_string, echo=True)
 
     try:
-        r = requests.get(dbinfo.STATIONS_URI, params={"apiKey": dbinfo.Rose, "contract": dbinfo.NAME})
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        r = requests.get(api_config.API_CONFIG["stations"]["stations_url"], params={"apiKey": api_config.API_CONFIG["stations"]["apiKey"], "contract": api_config.API_CONFIG["stations"]["contract"]}, headers=headers)
+        print(r)
+        print("----------------")
+        print(r.text)
+        data = r.json() 
+        print(type(data))
+
         stations_to_db(r.text, engine)
         time.sleep(5*60)
     except:

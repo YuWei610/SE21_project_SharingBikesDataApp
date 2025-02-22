@@ -2,7 +2,7 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 
 USER = "root"
-PASSWORD = "YOUR_PASSWORD"
+PASSWORD = "betty766"
 PORT = "3306"
 DB = "se21_local"
 URI = "127.0.0.1"
@@ -28,6 +28,49 @@ def print_table_structure(engine, table_name):
     print(f"\n📌 **{table_name} table struce:**")
     for row in result:
         print(f" - {row[0]} ({row[1]})")  # row[0] is column name, row[1] is data type
+
+def create_stationsv3_table(engine):
+    """Create the stationv3 table if it does not already exist."""
+    if table_exists(engine, "stationsv3"):
+        print("⚠️ stationsv3 table already exists, skipping table creation.")
+    else:
+        sql = text('''
+        CREATE TABLE stationsv3 (
+            number INTEGER PRIMARY KEY,
+            contract_name VARCHAR(256),
+            name VARCHAR(256),
+            address VARCHAR(256),
+            latitude FLOAT,
+            longitude FLOAT,
+            banking BOOLEAN,
+            bonus BOOLEAN,
+            status VARCHAR(50),
+            last_update TIMESTAMP,
+            connected BOOLEAN,
+            overflow BOOLEAN,
+            shape JSON,
+            total_available_bikes INTEGER,
+            total_available_stands INTEGER,
+            total_mechanical_bikes INTEGER,
+            total_electrical_bikes INTEGER,
+            total_electrical_internal_battery_bikes INTEGER,
+            total_electrical_removable_battery_bikes INTEGER,
+            total_capacity INTEGER, -- Corresponds to totalStands["capacity"]
+            main_available_bikes INTEGER,
+            main_available_stands INTEGER,
+            main_mechanical_bikes INTEGER,
+            main_electrical_bikes INTEGER,
+            main_electrical_internal_battery_bikes INTEGER,
+            main_electrical_removable_battery_bikes INTEGER,
+            main_capacity INTEGER -- Corresponds to mainStands["capacity"]
+        );
+        ''')
+        with engine.connect() as connection:
+            connection.execute(sql)
+            connection.commit()
+        print("✅ stationsv3 table created")
+    
+    print_table_structure(engine, "stationsv3")
 
 def create_station_table(engine):
     """create station table"""
@@ -103,7 +146,7 @@ def create_current_table(engine):
     print_table_structure(engine, "current")
 
 def create_hourly_table(engine):
-    """創建 hourly 表格"""
+    """create hourly table"""
     if table_exists(engine, "hourly"):
         print("⚠️ hourly table that already exist, skip the table creation.")
     else:
@@ -165,9 +208,14 @@ def create_daily_table(engine):
 def main():
 
     # which table need to be created
-    tables_to_create = ["station", "availability", "current", "hourly", "daily"]
+    # tables_to_create = ["stationsv3", "station", "availability", "current", "hourly", "daily"]
+    tables_to_create = ["stationsv3"]
+
 
     """create tables according to tables_to_create"""
+    if "stationsv3" in tables_to_create:
+        create_stationsv3_table(engine)
+
     if "station" in tables_to_create:
         create_station_table(engine)
 
