@@ -116,100 +116,153 @@ def create_availability_table(engine):
     print_table_structure(engine, "availability")
 
 def create_current_table(engine):
-    """create current table"""
-    if table_exists(engine, "current"):
-        print("⚠️ current table that already exist, skip the table creation.")
+    """create weather_current table"""
+    if table_exists(engine, "weather_current"):
+        print("⚠️ weather_current table that already exist, skip the table creation.")
     else:
         sql = text('''
-        CREATE TABLE current (
-            dt DATETIME NOT NULL,
-            feels_like FLOAT,
-            humidity INTEGER,
-            pressure INTEGER,
+        CREATE TABLE weather_current (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            timestamp DATETIME NOT NULL,
+            number INT NOT NULL,
+            name VARCHAR(100) NOT NULL,
+            address VARCHAR(255) NOT NULL,
+            latitude FLOAT NOT NULL,
+            longitude FLOAT NOT NULL,
+            timezone VARCHAR(50),
+            timezone_offset INT,
             sunrise DATETIME,
             sunset DATETIME,
-            temp FLOAT,
+            temperature_C FLOAT,
+            feels_like_C FLOAT,
+            pressure_hPa INT,
+            humidity_percent INT,
+            dew_point_C FLOAT,
             uvi FLOAT,
-            weather_id INTEGER,
-            wind_gust FLOAT,
-            wind_speed FLOAT,
-            rain_1h FLOAT,
-            snow_1h FLOAT,
-            PRIMARY KEY (dt)
-        );
+            cloud_coverage_percent INT,
+            visibility_m FLOAT,
+            wind_speed_mps FLOAT,
+            wind_direction_deg INT,
+            weather_id INT,
+            weather_main VARCHAR(50),
+            weather_description VARCHAR(100),
+            weather_icon VARCHAR(10),
+            pop FLOAT, 
+            rain JSON, 
+            snow JSON 
+            );
         ''')
         with engine.connect() as connection:
             connection.execute(sql)
             connection.commit()
-        print("✅ current created")
+        print("✅ weather_current created")
     
-    print_table_structure(engine, "current")
+    print_table_structure(engine, "weather_current")
 
 def create_hourly_table(engine):
-    """create hourly table"""
-    if table_exists(engine, "hourly"):
-        print("⚠️ hourly table that already exist, skip the table creation.")
+    """create weather_hourly table"""
+    if table_exists(engine, "weather_hourly"):
+        print("⚠️ weather_hourly table that already exist, skip the table creation.")
     else:
         sql = text('''
-        CREATE TABLE hourly (
-            dt DATETIME NOT NULL,
-            future_dt DATETIME NOT NULL,
-            feels_like FLOAT,
-            humidity INTEGER,
-            pop FLOAT,
-            pressure INTEGER,
-            temp FLOAT,
+        CREATE TABLE weather_hourly (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            timestamp DATETIME NOT NULL,   
+            number INT NOT NULL,
+            name VARCHAR(100) NOT NULL,
+            address VARCHAR(255) NOT NULL,
+            latitude FLOAT NOT NULL,
+            longitude FLOAT NOT NULL,
+            timezone VARCHAR(50),
+            timezone_offset INT,
+            temperature_C FLOAT,
+            feels_like_C FLOAT,
+            pressure_hPa INT,
+            humidity_percent INT,
+            dew_point_C FLOAT,
             uvi FLOAT,
-            weather_id INTEGER,
-            wind_speed FLOAT,
+            cloud_coverage_percent INT,
+            visibility_m FLOAT,
+            wind_speed_mps FLOAT,
+            wind_direction_deg INT,
             wind_gust FLOAT,
-            rain_1h FLOAT,
-            snow_1h FLOAT,
-            PRIMARY KEY (dt, future_dt)
-        );
+            weather_id INT,
+            weather_main VARCHAR(50),
+            weather_description VARCHAR(100),
+            weather_icon VARCHAR(10),
+            pop FLOAT, 
+            rain JSON, 
+            snow JSON 
+            );
         ''')
         with engine.connect() as connection:
             connection.execute(sql)
             connection.commit()
-        print("✅ hourly created")
+        print("✅ weather_hourly created")
     
-    print_table_structure(engine, "hourly")
+    print_table_structure(engine, "weather_hourly")
 
 def create_daily_table(engine):
-    """創建 daily 表格"""
-    if table_exists(engine, "daily"):
-        print("⚠️ daily table that already exist, skip the table creation.")
+    """create weather_daily table"""
+    if table_exists(engine, "weather_daily"):
+        print("⚠️ weather_daily table that already exist, skip the table creation.")
     else:
         sql = text('''
-        CREATE TABLE daily (
-            dt DATETIME NOT NULL,
-            future_dt DATETIME NOT NULL,
-            humidity INTEGER,
-            pop FLOAT,
-            pressure INTEGER,
-            temp_max FLOAT,
+        CREATE TABLE weather_daily (
+            id INT AUTO_INCREMENT PRIMARY KEY, 
+            date DATETIME NOT NULL,
+            number INT NOT NULL,
+            name VARCHAR(100) NOT NULL,
+            address VARCHAR(255) NOT NULL,
+            latitude FLOAT NOT NULL,
+            longitude FLOAT NOT NULL,
+            timezone VARCHAR(50),
+            timezone_offset INT,
+            sunrise DATETIME,
+            sunset DATETIME,
+            moonrise DATETIME,
+            moonset DATETIME,
+            moon_phase FLOAT,
+            summary TEXT,
+            temp_day FLOAT,
             temp_min FLOAT,
+            temp_max FLOAT,
+            temp_night FLOAT,
+            temp_eve FLOAT,
+            temp_morn FLOAT,
+            feels_like_day FLOAT,
+            feels_like_night FLOAT,
+            feels_like_eve FLOAT,
+            feels_like_morn FLOAT,
+            pressure_hPa INT,
+            humidity_percent INT,
+            dew_point_C FLOAT,
+            wind_speed_mps FLOAT,
+            wind_deg INT,
+            wind_gust_mps FLOAT,
+            cloud_coverage_percent INT,
+            pop FLOAT,
             uvi FLOAT,
-            weather_id INTEGER,
-            wind_speed FLOAT,
-            wind_gust FLOAT,
-            rain FLOAT,
-            snow FLOAT,
-            PRIMARY KEY (dt, future_dt)
+            weather_id INT,
+            weather_main VARCHAR(50),
+            weather_description VARCHAR(100),
+            weather_icon VARCHAR(10),
+            rain JSON,
+            snow JSON 
         );
         ''')
         with engine.connect() as connection:
             connection.execute(sql)
             connection.commit()
-        print("✅ daily created")
+        print("✅ weather_daily created")
     
-    print_table_structure(engine, "daily")
+    print_table_structure(engine, "weather_daily")
 
 def main():
 
     # which table need to be created
     # tables_to_create = ["stationsv3", "station", "availability", "current", "hourly", "daily"]
-    tables_to_create = ["stationsv3"]
+    tables_to_create = ["weather_current","weather_hourly","weather_daily"]
 
 
     """create tables according to tables_to_create"""
@@ -222,13 +275,13 @@ def main():
     if "availability" in tables_to_create:
         create_availability_table(engine)
 
-    if "current" in tables_to_create:
+    if "weather_current" in tables_to_create:
         create_current_table(engine)
 
-    if "hourly" in tables_to_create:
+    if "weather_hourly" in tables_to_create:
         create_hourly_table(engine)
 
-    if "daily" in tables_to_create:
+    if "weather_daily" in tables_to_create:
         create_daily_table(engine)
 
 if __name__ == "__main__":

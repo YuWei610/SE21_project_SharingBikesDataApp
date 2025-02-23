@@ -16,13 +16,13 @@ sys.path.append(project_path)
 # import api_config
 import api_config
 
-
-
 """
-Data are in dbinfo.py
-CKEY = "...."
-NAME = "dublin"
-STATIONS_URI = "https://api.jcdecaux.com/vls/v1/stations"
+api_config.API_CONFIG:
+    "stations": {
+        "apiKey": "29eb88187a0abad2baa09b51a856699b8f4bc972",
+        "stations_url": "https://api.jcdecaux.com/vls/v1/stations",
+        "contract" : "dublin"
+    },
 """
 
 def main():

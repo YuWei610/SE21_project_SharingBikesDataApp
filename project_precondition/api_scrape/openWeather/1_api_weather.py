@@ -17,14 +17,6 @@ sys.path.append(project_path)
 import api_config
 
 
-
-"""
-Data are in info_weather.py
-CKEY = "...."
-NAME = "dublin"
-STATIONS_URI = "https://api.jcdecaux.com/vls/v1/stations"
-"""
-
 def main():
     try:
         headers = {
