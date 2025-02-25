@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 
 USER = "root"
-PASSWORD = "betty766"
+PASSWORD = "YOUR_PASSWORD"
 PORT = "3306"
 DB = "se21_local"
 URI = "127.0.0.1"

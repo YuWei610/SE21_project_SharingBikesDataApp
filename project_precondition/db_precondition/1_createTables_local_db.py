@@ -2,7 +2,7 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 
 USER = "root"
-PASSWORD = "betty766"
+PASSWORD = "YOUR_PASSOWRD"
 PORT = "3306"
 DB = "se21_local"
 URI = "127.0.0.1"
@@ -261,8 +261,8 @@ def create_daily_table(engine):
 def main():
 
     # which table need to be created
-    # tables_to_create = ["stationsv3", "station", "availability", "current", "hourly", "daily"]
-    tables_to_create = ["weather_current","weather_hourly","weather_daily"]
+    # tables_to_create = ["stationsv3", "station", "availability","weather_current","weather_hourly","weather_daily"] #all tables
+    tables_to_create = ["station"]
 
 
     """create tables according to tables_to_create"""

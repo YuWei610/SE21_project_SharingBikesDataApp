@@ -24,9 +24,7 @@ sys.path.append(project_path)
 
 # import api_config, db_config, call_apis_function 
 import api_config
-import db_config
 from db_config import engine
-import call_api_stations
 
 
 def stationsv3_to_db(text_data, in_engine):
