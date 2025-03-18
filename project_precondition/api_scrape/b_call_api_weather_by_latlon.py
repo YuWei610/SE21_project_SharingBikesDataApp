@@ -23,7 +23,7 @@ api_config.API_CONFIG:
         "params": {
             "lat": {}},
             "lon": {}},
-            "appid": "70450CF782D602A647A20873C8FB5FD4"
+            "appid": "YOUR_API_KEY"
         }
 """
 
