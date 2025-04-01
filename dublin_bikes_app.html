@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dublin Bikes</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='static/dublin_bikes_app.css')}}">
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}"></script>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <div class="logo">Dublin Bikes</div>
+        <div class="weather-container">
+            <div class="weather" id="weather">Loading weather...</div>
+        </div>
+		<div style="margin-right: 30px; color: gray;">
+            <label id="station_button" onclick="toggleMarkersVisibility()">Hide Stations</label>
+		</div>
+    </div>
+
+    <!-- 侧边栏和地图 -->
+    <div class="container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+           <form id ="journeyform">
+                <label style="color: white; font-size: 15px; text-align: center; width: 100%; margin-left: 10px;">Please enter your starting location:</label>
+                <input id="startinglocation" type="text" style="background-color: aliceblue; width: 90%; height: 30px; align-items: center; margin: 20px 15px 20px 15px; font-size: 15px;" placeholder="Enter a starting location..."/>
+                <br />
+                <label style="color: white; font-size: 15px; text-align: center; width: 100%; margin-left: 10px;">Please enter your destination:</label>
+                <input id="destination" type="text" style="background-color: aliceblue; width: 90%; height: 30px; align-items: center; margin: 20px 15px 20px 15px; font-size: 15px;" placeholder="Enter your destination..."/>
+                <button id="planJourneyBtn" style="background-color: aliceblue; width: 90%; height: 40px; align-items: center; margin: 20px 15px 20px 15px; font-size: 15px; color: black;">Plan Your Journey</button>
+            </form>
+            
+            <div id="journeyDetails" style="margin-top: 20px; font-size: 16px;">
+            </div>
+        </div>
+
+        <!-- 地图部分 -->
+        <div class="map">
+            <div id="map" style="width: 100%; height: 100%;">	
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='static/dublin_bikes_app.js') }}"></script>
+
+	    
+

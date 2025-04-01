@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DublinBikes</title>
+	<style>
+	  /* 全局样式 */
+	      body {
+	          margin: 0;
+	          padding: 0;
+	          font-family: Arial, sans-serif;
+	          overflow: hidden;
+	      }
+	  
+	      /* 导航栏 */
+	      .navbar {
+	          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	          padding: 20px;
+	          background-color: white;
+	      }
+	  
+	      .navbar-content {
+	          display: flex;
+	          align-items: center;
+	          gap: 0;
+	      }
+	  
+	      .navbar img {
+	          height: 40px;
+	          width: auto;
+	      }
+	  
+	      .navbar .logo {
+	          margin-left: 30%;
+	          font-size: 20px;
+	          font-weight: bold;
+	      }
+	  
+	      .navbar #weather {
+	          margin-left: auto;
+	          display: flex;
+	          align-items: center;
+	          font-size: 20px;
+	      }
+	  
+	      /* 侧边栏和地图容器 */
+	      .container {
+	          display: flex;
+	          height: calc(100vh - 80px); /* 减去导航栏高度 */
+	      }
+	  
+	      /* 侧边栏 */
+	      .sidebar {
+	          width: 400px; /* 侧边栏宽度 */
+	          height: 100%; /* 确保侧边栏有高度 */
+	          box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+	          text-align: center; /* 水平居中文本内容 */
+	          display: flex; /* 使用 flexbox 布局 */
+	          flex-direction: column; /* 垂直排列子元素 */
+	          align-items: center; /* 水平居中内容 */
+	      }
+	  
+	      /* 单选框组样式 */
+	      .radio-group {
+	          width: 100%; /* 让单选框组占满侧边栏宽度 */
+	          display: flex;
+	          flex-direction: column;
+	          align-items: flex-start; /* 单选框左对齐 */
+	          margin-top: 10px; /* 与上方内容的间距 */
+	      }
+	  
+	      .radio-group label {
+	          margin-bottom: 8px; /* 单选框之间的间距 */
+	          cursor: pointer; /* 鼠标悬停时显示手型 */
+	          display: flex;
+	          align-items: center; /* 垂直居中对齐 */
+	          width: 100%;
+	      }
+	  
+	      .radio-group label input {
+	          margin-right: 10px; /* 单选框与文字的间距 */
+	      }
+	  
+	      /* 时间显示样式 */
+	      .time-display {
+	          margin-left: auto; /* 将时间推到最右边 */
+	          padding-left: 20px; /* 调整时间与单选框的间距 */
+	      }
+	  
+	      /* 地图 */
+	      .map {
+	          flex: 1; /* 占据剩余空间 */
+	          height: 100%;
+	      }
+	  
+	      #map {
+	          width: 100%;
+	          height: 100%;
+	      }
+	  
+	      /* 新添加的盒子 */
+	      .sidebar-bottom-box {
+	          margin-top: auto; /* 将盒子推到侧边栏底部 */
+	          width: 100%;
+			  height: 100%;
+	          padding: 20px;
+	          background-color: #f0f0f0; /* 背景颜色 */
+	          box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+	          text-align: left; /* 水平居中文本内容 */
+	      }
+	  </style>
+	  
+	  <!-- 导航栏 -->
+	  <div class="navbar">
+	      <div class="navbar-content">
+	          <!-- 左侧图标 -->
+	          <img src="img/menu.png" alt="Menu Icon" />
+	          <img src="img/780.jpg" alt="Profile Icon" style="width: 40px;" />
+	          <!-- 中间文字 -->
+	          <div class="logo">Ready!</div>
+	          <!-- 右侧天气容器 -->
+	          <div id="weather">
+	              <strong><span>Loading weather...</span></strong>
+	          </div>
+	      </div>
+	  </div>
+	  
+	  <!-- 侧边栏和地图 -->
+	  <div class="container">
+	      <!-- 侧边栏 -->
+	      <div class="sidebar">
+	          <h2 style="align-items: center;">Journey Planner</h2>
+	          <div class="radio-group">
+	              <label>
+	                  <input type="radio" name="option" value="Today">Today
+	              </label>
+	              <label>
+	                  <input type="radio" name="option" value="Tomorrow">Tomorrow
+	                  <span class="time-display" id="tomorrow-time"></span>
+	              </label>
+	              <label>
+	                  <input type="radio" name="option" value="The Next Day">The Next Day
+	              </label>
+	              <label style="margin-top: 20px;"><strong>Start:</strong></label>
+	              <input type="text" style="width: 90%; height: 30px; margin: 0 auto; margin-top: 5px; margin-bottom:20px ; background-color: aliceblue; border-radius:5px; border: 1 solid ghostwhite;"/>
+	              <label><strong>End:</strong></label>
+	              <input type="text"  style="width: 90%; height: 30px; margin: 0 auto; margin-top: 5px; margin-bottom:20px ;background-color: aliceblue;border-radius:5px; border: 1 solid ghostwhite;"/>
+	              <button type="submit" style="color:black;width: 90%; height: 40px; margin: 0 auto;margin-top: 5px; margin-bottom:20px ;background-color: blue;border-radius:5px; border: 1 solid ghostwhite; font-size: 20px;"><strong>Submit</strong></button>
+	              <button type="submit" style="color:black;width: 90%; height: 40px; margin: 0 auto;margin-top: 5px; margin-bottom:20px ;background-color: blue;border-radius:5px; border: 1 solid ghostwhite; font-size: 20px;"><strong>Directions</strong></button>
+	              <button>
+	                  <img src="img/R.png" style="height: 30px; width: 25px;"/>
+	              </button>
+	          </div>
+	          <!-- 新添加的盒子 -->
+	          <div class="sidebar-bottom-box">
+	              <label style="margin: 5px; margin-bottom: 20px;">
+					  <strong>
+						  Route Details<br />
+					  </strong>
+				  </label><br />
+				  <label style="margin-top: 30px;">
+					  XXX min xx min
+				  </label><br />
+				  <label style="margin: 5px; margin-bottom: 20px;">
+				  					  <strong>
+				  						  Depart Station Bikes :4
+				  					  </strong>
+				  </label><br />
+				  <label style="margin-top: 30px;">
+				  					  XXX min xx mins.<br />
+				  </label><br />
+				  <label style="margin: 5px; margin-bottom: 20px;">
+				  					  <strong>
+				  						 Arrive Station Parking:16
+				  					  </strong>
+				  </label><br />
+				  <label style="margin-top: 30px;">
+				  					  XXX min xx mins.
+				  </label>
+	          </div>
+	      </div>
+	  
+	      <!-- 地图 -->
+	      <div class="map">
+	          <div id="map">
+	              <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm9UnzDLdgIHQ1i_Fp4zfRZL6nuEM73t8&callback=initMap"
+	                      async defer></script>
+	          </div>
+	      </div>
+
+	</div>
+
+	    
+	   
+    <script>
+      function initMap() {
+        var location = { lat: 53.349805, lng: -6.260310 };  // 这里使用你想显示的位置
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 8,
+          center: location
+        });
+        var marker = new google.maps.Marker({
+          position: location,
+          map: map
+        });
+      }
+	   // 替换为你的 OpenWeatherMap API Key
+	     const apiKey = "1e5d3d18989bed9a0ed5f59d50a821ac";
+	              const city = "Dublin"; // 替换为你的城市
+	              const weatherElement = document.getElementById("weather");
+	      
+	              // 获取天气数据
+	              function fetchWeather() {
+	                  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+	      
+	                  fetch(url)
+	                      .then((response) => response.json())
+	                      .then((data) => {
+	                          const temperature = Math.round(data.main.temp); // 温度
+	                          const weatherIcon = data.weather[0].icon; // 天气图标
+	                          const weatherDescription = data.weather[0].description; // 天气描述
+	      
+	                          // 更新天气容器内容
+	                          weatherElement.innerHTML = `
+	                              <span>Predicted Weather: ${weatherDescription},</span>
+	                              <img src="http://openweathermap.org/img/wn/${weatherIcon}.png" alt="${weatherDescription}" style="height: 30px; width: 30px;" />
+	                              <span>Temperature: ${temperature}℃</span>
+	                          `;
+	                      })
+	                      .catch((error) => {
+	                          console.error("Error fetching weather data:", error);
+	                          weatherElement.innerHTML = "<span>Weather unavailable</span>";
+	                      });
+	              }
+				  // 更新实时时间的函数
+				      function updateTime() {
+				          const tomorrowTimeElement = document.getElementById('tomorrow-time');
+				          if (tomorrowTimeElement) {
+				              const now = new Date();
+				              const tomorrow = new Date(now);
+				              tomorrow.setDate(now.getDate() + 1); // 获取明天的日期
+				              const options = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+				              tomorrowTimeElement.textContent = tomorrow.toLocaleTimeString('en-US', options);
+				          }
+				      }
+				  
+				      // 每秒更新一次时间
+				      setInterval(updateTime, 1000);
+				  
+				      // 初始化时间显示
+				      updateTime();
+	      
+	              // 页面加载时获取天气
+	              fetchWeather();
+    </script>
+  </head>
+  <body onload="initMap()">
+    <div id="map" style="height: 500px; width: 100%;"></div>
+  </body>
+</html>
