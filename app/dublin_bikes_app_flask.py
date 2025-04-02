@@ -1,12 +1,12 @@
 from flask import Flask, jsonify, render_template
 import mysql.connector
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 import requests
 import dbinfo
 from datetime import datetime
 
-load_dotenv()
+# load_dotenv()
 
 #Connect to local db to access static station data.
 # mydb = mysql.connector.connect(
