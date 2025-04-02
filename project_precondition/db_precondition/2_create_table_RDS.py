@@ -5,8 +5,8 @@ from sqlalchemy import create_engine, text
 USER = "TBD_NEED_SHARED_METHOD"
 PASSWORD = "TBD_NEED_SHARED_METHOD"
 PORT = "3306"
-DB = "dbbikes"
-URI = "database-download-jc-decaux.c30wwi2iabza.eu-west-1.rds.amazonaws.com"
+DB = "se21_local"
+URI = "ec2-3-250-4-10.eu-west-1.compute.amazonaws.com"
 
 # built SQLAlchemy connection
 connection_string = f"mysql+pymysql://{USER}:{PASSWORD}@{URI}:{PORT}/{DB}"
