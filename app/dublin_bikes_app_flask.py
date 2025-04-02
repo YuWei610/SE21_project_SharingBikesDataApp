@@ -79,6 +79,10 @@ def index():
     # return render_template('index.html', api_key = os.getenv("gmaps_api_key"))
     return render_template('index.html', api_key = "AIzaSyCRiKA7AmZItAl0gwzFRJpN8jjQuyPYv68")
 
+@app.route('/station')
+def station():
+    return render_template('station.html')
+
 if __name__ == "__main__":
     app.run(host = "0.0.0.0", port=5000)
 
