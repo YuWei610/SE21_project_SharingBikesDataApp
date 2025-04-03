@@ -135,7 +135,7 @@ def get_barchart(station_id):
 @app.route('/')
 def index():
     # return render_template('index.html', api_key = os.getenv("gmaps_api_key"))
-    return render_template('index.html', api_key = "AIzaSyCRiKA7AmZItAl0gwzFRJpN8jjQuyPYv68")
+    return render_template('dublin_bikes_app.html', api_key = "AIzaSyCRiKA7AmZItAl0gwzFRJpN8jjQuyPYv68")
 
 if __name__ == "__main__":
     app.run(host = "0.0.0.0", port=5000)
