@@ -5,6 +5,8 @@ import os
 import requests
 import dbinfo
 from datetime import datetime
+import pandas as pd
+import matplotlib.pyplot as plt
 
 # load_dotenv()
 
@@ -73,6 +75,64 @@ def dynamic_details (station_Number):
         'status': status,
         'last_update': last_update_datetime,
     })
+
+# This section handles reading the historical data from a csv. Converting the last_reported feature to datatime and extracting the day of the week to a new feature
+# 'day_of_week'. 
+df = pd.read_csv('final_merged_data_trimmed.csv')
+
+df['last_reported'] = pd.to_datetime(df['last_reported'])
+df['day_of_week'] = df['last_reported'].dt.day_name()
+df['hour'] = df['last_reported'].dt.hour
+
+def station_details_barchart(station_id):
+    
+    current_day = datetime.today().strftime('%A')
+    station_data = df[(df['station_id'] == station_id) & (df['day_of_week'] == current_day)]
+
+    avg_bikes_per_hour = station_data.groupby('hour')['num_bikes_available'].mean()
+    avg_bike_stands_per_hour = station_data.groupby('hour')['num_docks_available'].mean()
+
+    avg_bikes_per_hour = avg_bikes_per_hour[(avg_bikes_per_hour.index >= 5) & (avg_bikes_per_hour.index <= 23)]
+    avg_bike_stands_per_hour = avg_bike_stands_per_hour[(avg_bike_stands_per_hour.index >= 5) & (avg_bike_stands_per_hour.index <= 23)]
+
+    fig, ax = plt.subplots(2, 1, figsize=(12, 14))
+
+    avg_bikes_per_hour.plot(kind='bar', stacked=True, colormap='viridis', ax=ax[0])
+    ax[0].set_title("Average Available Bikes per Hour on " + current_day + "'s")
+    ax[0].set_xlabel('Hour of the Day')
+    ax[0].set_ylabel('Average Available Bikes')
+    ax[0].set_xticklabels(avg_bikes_per_hour.index, rotation=45)
+
+    avg_bike_stands_per_hour.plot(kind='bar', stacked=True, colormap='magma', ax=ax[1])
+    ax[1].set_title("Average Bike Stands (Docks) per Hour on " + current_day + "'s")
+    ax[1].set_xlabel('Hour of the Day')
+    ax[1].set_ylabel('Average Bike Stands Available')
+    ax[1].set_xticklabels(avg_bike_stands_per_hour.index, rotation=45)
+
+    img_path = "static/images/station_" + str(station_id) + "_" + current_day + ".png"
+    os.makedirs(os.path.dirname(img_path), exist_ok=True)
+
+    ax[0].grid(True, axis='both', zorder=1)
+    ax[1].grid(True, axis='both', zorder=1)
+
+    plt.tight_layout()
+    plt.savefig(img_path)
+    plt.close(fig)
+    
+    return img_path
+
+# Third app route to get the plot in image form. When the user clicks on a marker this function will be called with the appropriate station ID and return
+# a png file that contains an image of both plots of available stations and available stands stacked vertically.
+@app.route('/get_barchart/<int:station_id>', methods=['GET'])
+def get_barchart(station_id):
+    img_path = station_details_barchart(station_id)
+    if img_path:
+        # Return the image path to the client
+        return jsonify({'img_path': img_path})
+    else:
+        return jsonify({'error': 'No data available for this station.'}), 404
+
+station_details_barchart(5)
 
 @app.route('/')
 def index():
