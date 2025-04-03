@@ -132,8 +132,6 @@ def get_barchart(station_id):
     else:
         return jsonify({'error': 'No data available for this station.'}), 404
 
-station_details_barchart(5)
-
 @app.route('/')
 def index():
     # return render_template('index.html', api_key = os.getenv("gmaps_api_key"))
