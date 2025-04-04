@@ -1,23 +1,27 @@
+
 html, body {
     margin: 0;
     padding: 0;
     overflow: hidden; 
     height: 100%;
+    font-family: Arial, sans-serif;
 }
 
 /* 导航栏样式 */
 .navbar {
     width: 100%;
     height: 60px;
-    background-color: black;
+    background-color: #333;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
     color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 .navbar .logo {
     font-size: 25px;
+    font-weight: bold;
 }
 .navbar .weather-container {
     flex: 1; /* 占据剩余空间 */
@@ -28,6 +32,17 @@ html, body {
 .navbar .weather {
     font-size: 18px;
 }
+.navbar .nav-links {
+    margin-right: 30px;
+}
+.navbar .nav-links a {
+    color: #ccc;
+    text-decoration: none;
+    margin-left: 15px;
+}
+.navbar .nav-links a:hover {
+    color: white;
+}
 
 /* 侧边栏和地图容器 */
 .container {
@@ -37,49 +52,396 @@ html, body {
 }
 .sidebar {
     width: 350px;
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; 
+    background-color: #f5f5f5;
+    padding: 15px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto;
 }
-
-
 .map {
     flex: 1;
     height: 100%;
-    overflow: hidden; 
+    position: relative;
 }
 .map-buttons {
-    position: fixed;
-    top: 10%;
-    right: 40%;
-    z-index: 1000; /* 确保按钮在地图上方 */
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+        }
+        .map-buttons button {
+    background-color: #333;
+    color: white;
+            border: 0;
+    padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+        }
+        .map-buttons button:hover {
+    background-color: #555;
 }
-.map-buttons button {
-    background-color: black;
-    color: #ccc;
-    border: 0;
-    padding: 10px 15px;
-    margin: 5px;
+
+/* 按钮状态样式 */
+.map-buttons button[data-hidden="true"] {
+    background-color: #555;
+}
+
+/* 表单样式 */
+.form-control {
+    margin-bottom: 15px;
+}
+.form-control label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+.form-control input, .form-control select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
     font-size: 14px;
+}
+.form-control button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+.form-control button:hover {
+    background-color: #3367d6;
+}
+
+/* 路线详情样式 */
+#route-details {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-.map-buttons button:hover {
-    background-color:white;
+#route-details h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
 }
-
-.info-content {
-    font-family: Arial;
-}
-
-.gm-style-iw-d {
-    overflow: hidden !important;
-}
-
-button.gm-ui-hover-effect {
-    visibility: hidden;
+#route-details hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 10px 0;
 }
 
+/* 浮窗样式 */
+.filter-modal {
+    position: fixed;
+    top: 75px;
+    right: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    padding: 15px;
+    z-index: 1000;
+    width: 280px;
+    transition: all 0.3s ease;
+}
+
+.filter-modal h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-modal h3 button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #999;
+}
+
+.filter-modal .form-group {
+    margin-bottom: 12px;
+}
+
+.filter-modal label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.filter-modal select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.filter-modal .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.filter-modal button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filter-modal .apply-btn {
+    background-color: #4285f4;
+    color: white;
+}
+
+.filter-modal .reset-btn {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+/* 浮窗触发按钮 */
+.filter-trigger {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    background: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.filter-trigger i {
+    font-size: 24px;
+    color: #555;
+}
+
+/* 折叠状态 */
+.filter-modal.collapsed {
+    transform: translateX(110%);
+}
+
+/* 筛选结果区域样式 */
+.filter-results {
+    margin-top: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.filter-results h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.results-content {
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.placeholder-text {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* 站点详情弹窗样式 */
+.station-popup {
+    position: fixed;
+    left: 15px;
+    top: 75px;
+    width: 350px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    padding: 0;
+    display: none;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+.station-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #f8f8f8;
+    border-radius: 8px 8px 0 0;
+}
+
+.station-popup-header h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+.station-popup-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+}
+
+.station-popup-body {
+    padding: 15px;
+}
+
+.station-popup-info {
+    margin-bottom: 20px;
+}
+
+.station-popup-info p {
+    margin: 10px 0;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.station-popup-info p span:first-child {
+    font-weight: bold;
+    color: #333;
+}
+
+.station-popup-info p span:last-child {
+    color: #555;
+}
+
+.station-popup-actions {
+    display: flex;
+    gap: 10px;
+    padding: 0 15px 15px;
+}
+
+.station-popup-btn {
+    flex: 1;
+    padding: 12px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+}
+
+.station-popup-btn.start {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.station-popup-btn.end {
+    background-color: #F44336;
+    color: white;
+}
+
+/* 站点图表样式 */
+.station-charts {
+    margin-top: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.station-chart {
+    margin-bottom: 25px;
+}
+
+.station-chart h4 {
+    font-size: 14px;
+    color: #333;
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+.chart-container {
+    height: 150px;
+    display: flex;
+    align-items: flex-end;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.chart-bar {
+    flex: 1;
+    background-color: #4fc3f7;
+    margin: 0 2px;
+    position: relative;
+    border-radius: 2px 2px 0 0;
+    transition: height 0.3s;
+}
+
+.chart-bar.bike {
+    background-color: #4fc3f7;
+}
+
+.chart-bar.stand {
+    background-color: #81c784;
+}
+
+.chart-bar:hover::after {
+    content: attr(data-value);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.time-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #777;
+    padding: 0 2px;
+}
+
+.time-label {
+    flex: 1;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+        }
