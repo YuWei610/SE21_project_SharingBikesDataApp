@@ -2,79 +2,6 @@
 <html>
   <head>
     <title>Google Map Example</title>
-   <style>
-        
-        html, body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden; 
-            height: 100%;
-        }
-
-        /* 导航栏样式 */
-        .navbar {
-            width: 100%;
-            height: 60px;
-            background-color: black;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            color: white;
-        }
-        .navbar .logo {
-            font-size: 25px;
-        }
-        .navbar .weather-container {
-            flex: 1; /* 占据剩余空间 */
-            display: flex;
-            justify-content: center; 
-            align-items: center; 
-        }
-        .navbar .weather {
-            font-size: 18px;
-        }
-
-        /* 侧边栏和地图容器 */
-        .container {
-            display: flex;
-            height: calc(100vh - 60px);
-            overflow: hidden;
-        }
-        .sidebar {
-            width: 350px;
-            background-color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden; 
-        }
-        .map {
-            flex: 1;
-            height: 100%;
-            overflow: hidden; 
-        }
-		.map-buttons {
-		            position: fixed;
-		            top: 10%;
-		            right: 40%;
-		            z-index: 1000; /* 确保按钮在地图上方 */
-		        }
-		        .map-buttons button {
-		            background-color: black;
-					color: #ccc;
-		            border: 0;
-		            padding: 10px 15px;
-		            margin: 5px;
-		            font-size: 14px;
-		            cursor: pointer;
-		            border-radius: 5px;
-		            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-		        }
-		        .map-buttons button:hover {
-		            background-color:white;
-		        }
-    </style>
 </head>
 <body>
     <!-- 导航栏 -->
@@ -83,9 +10,9 @@
         <div class="weather-container">
             <div class="weather" id="weather">Loading weather...</div>
         </div>
-		<div style="margin-right: 30px; color: gray;">
-			<label>View Map&nbsp;&nbsp;</label>
-			<label>View Stations</label>
+        <div class="nav-links">
+            <a href="#">View Map</a>
+            <a href="#">View Stations</a>
 		</div>
     </div>
 
@@ -93,101 +20,214 @@
     <div class="container">
         <!-- 侧边栏 -->
         <div class="sidebar">
-            <form  action="station.html">
-                <label style="color: white; font-size: 15px; text-align: center; width: 100%; margin-left: 10px;">Please enter your starting location:</label>
-                <input type="text" style="background-color: aliceblue; width: 90%; height: 30px; align-items: center; margin: 20px 15px 20px 15px; font-size: 15px;" placeholder="Enter a starting location..."/>
-                <br />
-                <label style="color: white; font-size: 15px; text-align: center; width: 100%; margin-left: 10px;">Please enter your destination:</label>
-                <input type="text" style="background-color: aliceblue; width: 90%; height: 30px; align-items: center; margin: 20px 15px 20px 15px; font-size: 15px;" placeholder="Enter your destination..."/>
-                <label style="color: white; font-size: 15px; text-align: center; width: 100%; margin-left: 10px;">Please Input the day and hour you wish to travel:</label><br />
-                <select style="width: 130px; height: 30px; margin-top: 15px; margin-left: 20px; font-size: 18px;">
+            <h2>Plan Your Journey</h2>
+            <form id="route-planner-form">
+                <div class="form-control">
+                    <label for="start-location">Start location:</label>
+                    <input type="text" id="start-location" placeholder="Enter start location..."/>
+                </div>
+                
+                <div class="form-control">
+                    <label for="end-location">End location:</label>
+                    <input type="text" id="end-location" placeholder="Enter end location..."/>
+                </div>
+                
+                <div class="form-control">
+                    <label for="day-select">Select date:</label>
+                    <select id="day-select">
                     <option value="Sunday">Sunday</option>
                     <option value="Monday">Monday</option>
                     <option value="Tuesday">Tuesday</option>
                     <option value="Wednesday">Wednesday</option>
                     <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
                     <option value="Saturday">Saturday</option>
                 </select>
-                <select style="width: 100px; height: 30px; margin-top: 15px; margin-left: 20px; font-size: 18px;">
-                    <option>5:00</option>
-                    <option>6:00</option>
-                    <option>7:00</option>
-                    <option>8:00</option>
-                    <option>9:00</option>
-                    <option>10:00</option>
-					<option>11:00</option>
-					<option>12:00</option>
-					<option>13:00</option>
-					<option>14:00</option>
-					<option>15:00</option>
-					<option>16:00</option>
-					<option>17:00</option>
-					<option>18:00</option>
-					<option>19:00</option>
-					<option>20:00</option>
-					<option>21:00</option>
-                </select>
+                </div>
                 
-				
-					<button type="submit" style="background-color: aliceblue; width: 90%; height: 40px; align-items: center; margin: 20px 15px 20px 15px; font-size: 15px; color: black;">Plan Your Journey</button>
+                <div class="form-control">
+                    <label for="time-select">Select time:</label>
+                    <select id="time-select">
+                    <option value="5">5:00</option>
+                    <option value="6">6:00</option>
+                    <option value="7">7:00</option>
+                    <option value="8">8:00</option>
+                    <option value="9">9:00</option>
+                    <option value="10">10:00</option>
+                    <option value="11">11:00</option>
+                    <option value="12">12:00</option>
+                    <option value="13">13:00</option>
+                    <option value="14">14:00</option>
+                    <option value="15">15:00</option>
+                    <option value="16">16:00</option>
+                    <option value="17">17:00</option>
+                    <option value="18">18:00</option>
+                    <option value="19">19:00</option>
+                    <option value="20">20:00</option>
+                    <option value="21">21:00</option>
+                </select>
+                </div>
+                
+                <div class="form-control">
+                    <button type="button" id="plan-journey-btn">Plan route</button>
+                </div>
             </form>
+            
+            <!-- 路线详情容器 -->
+            <div id="route-details" style="display: none;">
+                <h3>Route details</h3>
+                <div id="route-details-content"></div>
+            </div>
+            
+            <!-- 添加站点详情面板 -->
+            <div id="station-details" style="display: none;">
+                <h3>Station details</h3>
+                <div id="station-info-content"></div>
+            </div>
         </div>
 
         <!-- 地图部分 -->
         <div class="map">
 			 <div class="map-buttons">
 				 <form action="station.html">
-					 <button id="zoom-in" type="submit">Plan Your Jourrney</button>					
-										  <button id="zoom-out" type="button">Hide Stations</button>
+                    <button id="zoom-in" type="submit">Plan Your Journey</button>					
 				 </form>
-				 
-				 
-			 			            </div>
+                <button id="zoom-out" type="button" data-hidden="false">Hide Stations</button>
+            </div>
             <div id="map" style="width: 100%; height: 100%;">
-            	
-                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm9UnzDLdgIHQ1i_Fp4zfRZL6nuEM73t8&callback=initMap" async defer></script>
+                <!-- 移除Google Maps API的异步加载 -->
+                <script>
+                    // 改为不依赖Google API的初始化
+                    window.onload = function() {
+                        // 如果没有Google Maps API，则使用备用初始化方法
+                        if (typeof google === 'undefined') {
+                            console.log("Google Maps API 不可用，使用备用地图显示");
+                            initMapWithoutAPI();
+                        } else {
+                            loadGoogleMapsScript();
+                        }
+                    };
+                    
+                    function loadGoogleMapsScript() {
+                        try {
+                            const script = document.createElement('script');
+                            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBm9UnzDLdgIHQ1i_Fp4zfRZL6nuEM73t8&libraries=places,directions&language=zh-CN&callback=initMap';
+                            script.async = true;
+                            script.defer = true;
+                            script.onerror = function() {
+                                console.error("加载Google Maps API失败，使用备用地图");
+                                initMapWithoutAPI();
+                            };
+                            document.body.appendChild(script);
+                        } catch (e) {
+                            console.error("加载脚本时出错:", e);
+                            initMapWithoutAPI();
+                        }
+                    }
+                </script>
             </div>
         </div>
     </div>
 
-	       
-    <script>
-      function initMap() {
-        var location = { lat: 53.349805, lng: -6.260310 };  // 这里使用你想显示的位置
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 8,
-          center: location
-        });
-        var marker = new google.maps.Marker({
-          position: location,
-          map: map
-        });
-      }
-	    // 使用OpenWeatherMap API获取天气数据
-	          const apiKey = '1e5d3d18989bed9a0ed5f59d50a821ac'; // 替换为你的OpenWeatherMap API密钥
-	          const city = 'Dublin'; // 你可以根据需要更改城市
-	          const weatherElement = document.getElementById('weather');
-	  
-	          function fetchWeather() {
-	              fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
-	                  .then(response => response.json())
-	                  .then(data => {
-	                      const weather = data.weather[0].description;
-	                      const temp = data.main.temp;
-	                      weatherElement.textContent = `${city}: ${temp}°C, ${weather}`;
-	                  })
-	                  .catch(error => {
-	                      console.error('Error fetching weather data:', error);
-	                      weatherElement.textContent = 'Failed to load weather data';
-	                  });
-	          }
-	  
-	          // 页面加载时获取天气数据
-	          fetchWeather();
-    </script>
-  </head>
-  <body onload="initMap()">
-    <div id="map" style="height: 500px; width: 100%;"></div>
+    <!-- 添加浮窗触发按钮 -->
+    <div class="filter-trigger" onclick="toggleFilterModal()">
+        <i>⚙️</i>
+			 			            </div>
+    
+    <!-- 添加筛选浮窗 -->
+    <div id="filter-modal" class="filter-modal collapsed">
+        <h3>
+            数据筛选
+            <button onclick="toggleFilterModal()">✕</button>
+        </h3>
+        
+        <div class="form-group">
+            <label for="station-select">选择站点:</label>
+            <select id="station-select">
+                <option value="">所有站点</option>
+                <!-- 站点选项将由JavaScript动态填充 -->
+            </select>
+            </div>
+        
+        <div class="form-group">
+            <label for="time-select">选择时刻:</label>
+            <select id="time-select">
+                <option value="0">00:00</option>
+                <option value="1">01:00</option>
+                <option value="2">02:00</option>
+                <option value="3">03:00</option>
+                <option value="4">04:00</option>
+                <option value="5">05:00</option>
+                <option value="6">06:00</option>
+                <option value="7">07:00</option>
+                <option value="8">08:00</option>
+                <option value="9">09:00</option>
+                <option value="10">10:00</option>
+                <option value="11">11:00</option>
+                <option value="12">12:00</option>
+                <option value="13">13:00</option>
+                <option value="14">14:00</option>
+                <option value="15">15:00</option>
+                <option value="16">16:00</option>
+                <option value="17">17:00</option>
+                <option value="18">18:00</option>
+                <option value="19">19:00</option>
+                <option value="20">20:00</option>
+                <option value="21">21:00</option>
+                <option value="22">22:00</option>
+                <option value="23">23:00</option>
+            </select>
+        </div>
+        
+        <div class="actions">
+            <button class="reset-btn" onclick="resetFilters()">重置</button>
+            <button class="apply-btn" onclick="applyFilters()">应用</button>
+    </div>
+
+        <!-- 新增数据结果显示区域 -->
+        <div id="filter-results" class="filter-results">
+            <div class="results-header">
+                <h4>筛选结果</h4>
+            </div>
+            <div class="results-content">
+                <!-- 这里会显示后端返回的数据 -->
+                <p class="placeholder-text">应用筛选后将显示结果...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加站点详情弹窗 -->
+    <div id="station-popup" class="station-popup">
+      <div class="station-popup-header">
+        <h3 id="station-popup-title">Station Details</h3>
+        <button class="station-popup-close" onclick="closeStationPopup()">✕</button>
+      </div>
+      <div class="station-popup-body">
+        <div class="station-popup-info" id="station-popup-content">
+          <!-- 站点信息将动态填充 -->
+        </div>
+        
+        <!-- 站点统计图表 -->
+        <div class="station-charts" id="station-charts">
+          <div class="station-chart">
+            <h4>Average Available Bikes (by hour)</h4>
+            <div class="chart-container" id="bikes-chart-container"></div>
+            <div class="time-labels" id="bikes-time-labels"></div>
+          </div>
+          
+          <div class="station-chart">
+            <h4>Average Available Stands (by hour)</h4>
+            <div class="chart-container" id="stands-chart-container"></div>
+            <div class="time-labels" id="stands-time-labels"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="station-popup-actions">
+        <button class="station-popup-btn start" id="set-as-start-btn">Set as Start</button>
+        <button class="station-popup-btn end" id="set-as-end-btn">Set as End</button>
+      </div>
+    </div>
   </body>
 </html>
 

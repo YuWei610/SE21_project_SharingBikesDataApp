@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template
-#import mysql.connector
+import mysql.connector
 # from dotenv import load_dotenv
 import os
 import requests
@@ -19,14 +19,14 @@ import matplotlib.pyplot as plt
 # )
 
 # Connect to EC2 MySQL db to access static station data.
-#mydb = mysql.connector.connect(
-  #host="localhost",
-  #user="root",
-  #password="",
-  #database="se21_local",
-#)###
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="",
+  database="se21_local",
+)
 
-#mycursor = mydb.cursor()
+mycursor = mydb.cursor()
 
 app = Flask(__name__, static_url_path="")
 
@@ -34,7 +34,7 @@ app = Flask(__name__, static_url_path="")
 @app.route('/stations', methods=['GET'])
 def get_stations():
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM stations")
+    mycursor.execute("SELECT * FROM station")
     rows = mycursor.fetchall()
     return jsonify(rows)
 
