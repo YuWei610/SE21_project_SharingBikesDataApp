@@ -13,3 +13,6 @@ add justify the prediction result
 evaluation in the report:
 if we choose linear regression -> MAE
 if we want to do the binary classification - > recall, accurancy...
+
+do the architecture figure
+
