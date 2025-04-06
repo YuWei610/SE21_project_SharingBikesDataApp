@@ -283,74 +283,72 @@
 
         /* 站点详情弹窗样式 */
         .station-popup {
-            position: fixed;
-            left: 15px;
-            top: 75px;
-            transform: none;
-            width: 350px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            padding: 0;
-            display: none;
-            max-height: calc(100vh - 100px);
+            position: absolute;
+            top: 60px; /* 与导航栏底部对齐 */
+            left: 0;
+            width: 350px; /* 与侧边栏宽度相同 */
+            height: calc(100vh - 60px); /* 视口高度减去导航栏高度 */
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
             overflow-y: auto;
-            font-family: Arial, sans-serif;
-            border: 1px solid #eaeaea;
+            z-index: 1000;
+            display: none;
+            padding: 15px;
+            border-right: 1px solid #e0e0e0;
         }
         
+        /* 站点弹窗标题区域样式 */
         .station-popup-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 20px;
-            border-bottom: 1px solid #eee;
-            background-color: #f8f9fa;
-            border-radius: 12px 12px 0 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 15px;
         }
         
         .station-popup-header h3 {
             margin: 0;
-            padding: 0;
             font-size: 20px;
-            color: #333;
             font-weight: bold;
         }
         
         .station-popup-close {
             background: none;
             border: none;
-            font-size: 22px;
-            color: #777;
             cursor: pointer;
+            font-size: 20px;
+            color: #888;
             transition: color 0.2s;
+            padding: 0;
+            line-height: 1;
         }
         
         .station-popup-close:hover {
             color: #333;
         }
         
+        /* 站点信息内容区域样式 */
         .station-popup-body {
-            padding: 20px;
+            padding: 0;
         }
         
         .station-popup-info {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         .station-popup-info p {
-            margin: 12px 0;
-            font-size: 16px;
             display: flex;
             justify-content: space-between;
+            margin: 8px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 10px;
+            font-size: 15px;
         }
         
         .station-popup-info p span:first-child {
             font-weight: bold;
-            color: #444;
+            color: #555;
         }
         
         .station-popup-info p span:last-child {
@@ -360,45 +358,45 @@
         
         .station-popup-actions {
             display: flex;
-            gap: 12px;
-            padding: 0 20px 20px;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
         }
         
         .station-popup-btn {
             flex: 1;
-            padding: 14px 0;
+            padding: 12px;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
             text-align: center;
-            transition: all 0.2s ease;
+            font-weight: 600;
+            transition: background-color 0.2s;
         }
         
         .station-popup-btn.start {
-            background-color: #4CAF50;
+            background-color: #4285f4;
             color: white;
         }
         
         .station-popup-btn.start:hover {
-            background-color: #3d9140;
+            background-color: #3367d6;
         }
         
         .station-popup-btn.end {
-            background-color: #F44336;
+            background-color: #34a853;
             color: white;
         }
         
         .station-popup-btn.end:hover {
-            background-color: #d32f2f;
+            background-color: #2d9144;
         }
         
         /* 站点图表样式 */
         .station-charts {
-            margin-top: 20px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
+            margin-top: 25px;
         }
         
         .station-chart {
@@ -406,10 +404,10 @@
         }
         
         .station-chart h4 {
+            margin-bottom: 15px;
             font-size: 16px;
-            color: #333;
-            margin: 0 0 15px 0;
             text-align: center;
+            color: #333;
             font-weight: 600;
         }
         
@@ -417,68 +415,55 @@
             height: 180px;
             display: flex;
             align-items: flex-end;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 8px;
-            position: relative;
-            background-color: #fafafa;
-            border-radius: 6px 6px 0 0;
-            padding-top: 10px;
+            margin-bottom: 5px;
+            background-color: #f9f9f9;
+            padding: 10px 5px 0;
+            border-radius: 4px;
         }
         
         .chart-bar {
             flex: 1;
-            margin: 0 3px;
+            margin: 0 1px;
+            background-color: #4285f4;
+            min-height: 1px;
             position: relative;
-            border-radius: 4px 4px 0 0;
-            transition: height 0.3s, background-color 0.2s;
+            transition: height 0.3s;
         }
         
         .chart-bar.bike {
-            background-color: #64b5f6;
-        }
-        
-        .chart-bar.bike:hover {
-            background-color: #2196f3;
+            background-color: #4285f4;
         }
         
         .chart-bar.stand {
-            background-color: #81c784;
-        }
-        
-        .chart-bar.stand:hover {
-            background-color: #4caf50;
+            background-color: #34a853;
         }
         
         .chart-bar:hover::after {
             content: attr(data-value);
             position: absolute;
-            bottom: 100%;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0,0,0,0.7);
             color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 2px 6px;
+            border-radius: 3px;
             font-size: 12px;
             white-space: nowrap;
-            font-weight: bold;
+            z-index: 10;
         }
         
         .time-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            color: #666;
-            padding: 0 3px;
             margin-top: 5px;
         }
         
         .time-label {
             flex: 1;
             text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-size: 11px;
+            color: #666;
         }
         
         .station-popup-btn.end:hover {
@@ -487,21 +472,22 @@
         
         /* 行程规划弹窗样式 */
         #journey-planner-popup {
-            width: 350px; 
-            left: 15px;
-            top: 75px;
-            transform: none;
-            border-radius: 12px;
-            z-index: 1050; /* 确保在其他元素之上 */
+            position: absolute;
+            top: 60px; /* 与导航栏底部对齐 */
+            left: 0;
+            width: 350px; /* 与侧边栏宽度相同 */
+            height: calc(100vh - 60px); /* 视口高度减去导航栏高度 */
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            z-index: 1000;
             display: none;
-            height: calc(100vh - 90px);
-            overflow: hidden; /* 修改为hidden，内部content设置滚动 */
-            display: flex;
-            flex-direction: column;
+            padding: 15px;
+            border-right: 1px solid #e0e0e0;
         }
         
         #journey-planner-popup.active {
-            display: flex;
+            display: block;
         }
         
         .station-popup-header {
@@ -515,39 +501,36 @@
         }
         
         .journey-planner-content {
-            padding: 15px;
+            padding: 0;
         }
         
         .date-selector {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .date-option {
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            margin-bottom: 8px;
         }
         
         .date-option input[type="radio"] {
-            margin-right: 8px;
+            margin-right: 10px;
+        }
+        
+        .date-option label {
+            font-size: 15px;
         }
         
         .time-selector {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .time-selector label {
-            margin-right: 10px;
-            width: 50px;
-        }
-        
-        .time-selector select {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 15px;
         }
         
         .location-input {
@@ -557,30 +540,22 @@
         .location-input label {
             display: block;
             margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .location-input input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+            font-weight: 600;
+            font-size: 15px;
         }
         
         .btn {
-            display: block;
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background-color: #4285f4;
             color: white;
             border: none;
             border-radius: 4px;
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
             margin-bottom: 10px;
-            text-align: center;
+            font-weight: 600;
+            transition: background-color 0.2s;
         }
         
         .btn:hover {
@@ -588,22 +563,21 @@
         }
         
         .btn-secondary {
-            background-color: #f8f9fa;
-            color: #3c4043;
-            border: 1px solid #dadce0;
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
         }
         
         .btn-secondary:hover {
-            background-color: #f1f3f4;
+            background-color: #e5e5e5;
         }
         
         .route-details {
+            margin-top: 20px;
+            padding: 15px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            padding: 15px;
-            margin-top: 15px;
-            margin-bottom: 15px;
-            background-color: white;
+            background-color: #f9f9f9;
         }
         
         .route-details h3 {
@@ -665,9 +639,30 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0); /* 改为完全透明 */
             z-index: 999;
             display: none;
+            pointer-events: none; /* 添加这行让鼠标事件穿透遮罩层 */
+        }
+
+        /* 恢复时间选择器样式 */
+        .time-selector select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* 恢复位置输入框样式 */
+        .location-input input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -1076,51 +1071,55 @@
       
       // 在地图上显示站点的函数
       function displayStations(map, stations) {
-        const hideButton = document.getElementById('zoom-out');
-        if(hideButton) {
-          hideButton.textContent = "Hide Stations";
-          hideButton.dataset.visible = "true";
+        // 清除之前的标记
+        if (window.stationMarkers) {
+            window.stationMarkers.forEach(marker => marker.setMap(null));
         }
-        
-        // 清除现有标记
-        if (window.stationMarkers && window.stationMarkers.length > 0) {
-          window.stationMarkers.forEach(marker => marker.setMap(null));
-        }
-        
-        // 创建新标记数组
         window.stationMarkers = [];
         
-        // 创建每个站点的标记
+        // 遍历站点数据创建标记
         stations.forEach(station => {
-          // 创建标记
-          const marker = new google.maps.Marker({
-            position: { 
-              lat: parseFloat(station.Latitude), 
-              lng: parseFloat(station.Longitude) 
-            },
-            map: map,
-            title: station.Name,
-            icon: {
-              path: google.maps.SymbolPath.CIRCLE,
-              fillColor: '#3388ff',
-              fillOpacity: 0.8,
-              strokeWeight: 1,
-              strokeColor: '#ffffff',
-              scale: 8
-            }
-          });
-          
-          // 保存标记
-          window.stationMarkers.push(marker);
-          
-          // 添加点击事件
-          marker.addListener('click', () => {
-            // 显示站点信息到侧边栏
-            showStationInfoInSidebar(station);
+            // 有些测试站点可能没有坐标，需要处理
+            const lat = parseFloat(station.Latitude || station.latitude || 0);
+            const lng = parseFloat(station.Longitude || station.longitude || 0);
             
-            // 设置路线起点或终点
-            handleStationSelection(station);
-          });
+            if (isNaN(lat) || isNaN(lng) || (lat === 0 && lng === 0)) {
+                console.warn('站点没有有效的坐标:', station.Name || station.name);
+                return;
+            }
+            
+            // 创建标记
+            const marker = new google.maps.Marker({
+                position: {
+                    lat: lat,
+                    lng: lng
+                },
+                map: map,
+                title: station.Name,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: '#3388ff',
+                    fillOpacity: 0.8,
+                    strokeWeight: 1,
+                    strokeColor: '#ffffff',
+                    scale: 8
+                }
+            });
+            
+            // 保存标记
+            window.stationMarkers.push(marker);
+            
+            // 添加点击事件
+            marker.addListener('click', () => {
+                // 先关闭行程规划弹窗
+                closeJourneyPlannerPopup();
+                
+                // 显示站点信息到侧边栏
+                showStationInfoInSidebar(station);
+                
+                // 设置路线起点或终点
+                handleStationSelection(station);
+            });
         });
         
         // 添加对象到地图
@@ -1153,8 +1152,8 @@
         if (!station.Available_bike_stands) station.Available_bike_stands = Math.floor(Math.random() * 15) + 5;
         const totalCapacity = parseInt(station.Available_bikes) + parseInt(station.Available_bike_stands);
         
-        // 显示遮罩层
-        document.getElementById('overlay').style.display = 'block';
+        // 关闭行程规划弹窗，确保不会两个同时显示
+        closeJourneyPlannerPopup();
         
         // 显示站点弹窗
         const popup = document.getElementById('station-popup');
@@ -1320,8 +1319,8 @@
         const popup = document.getElementById('station-popup');
         popup.style.display = 'none';
         
-        // 隐藏遮罩层
-        document.getElementById('overlay').style.display = 'none';
+        // 不隐藏遮罩层，注释掉以下行
+        // document.getElementById('overlay').style.display = 'none';
       }
       
       // 将站点设为起点
@@ -1344,150 +1343,441 @@
       
       // 规划路线
       function planJourney() {
-        try {
-            console.log("规划路线...");
+        console.log("执行路线规划...");
+
+        // 获取Journey Planner弹窗中的输入值
+        let startLocation, endLocation;
+        
+        // 检查是否在Journey Planner弹窗中
+        const journeyPlannerPopup = document.getElementById('journey-planner-popup');
+        if (journeyPlannerPopup && journeyPlannerPopup.style.display === 'block') {
+            // 从Journey Planner弹窗获取值
+            startLocation = document.querySelector('#journey-planner-popup #start-location').value;
+            endLocation = document.querySelector('#journey-planner-popup #end-location').value;
+        } else {
+            // 从侧边栏获取值
+            startLocation = document.getElementById('start-location').value;
+            endLocation = document.getElementById('end-location').value;
+        }
+        
+        console.log("获取到的起点:", startLocation);
+        console.log("获取到的终点:", endLocation);
+        
+        const selectedDay = document.querySelector('input[name="journey-date"]:checked')?.value || 'today';
+        const selectedTime = document.getElementById('journey-time')?.value || '00:05';
+        
+        if (!startLocation || !endLocation) {
+            alert('请输入起点和终点位置');
+            return;
+        }
+        
+        // 显示加载状态
+        const planButton = document.getElementById('plan-journey-btn') || document.querySelector('.btn');
+        if (planButton) {
+            const originalText = planButton.textContent;
+            planButton.textContent = '正在计算路线...';
+            planButton.disabled = true;
             
-            // 获取用户选择的起点和终点
-            const startInput = document.getElementById('start-location').value.trim();
-            const endInput = document.getElementById('end-location').value.trim();
+            // 恢复按钮状态的函数
+            const restoreButton = () => {
+                planButton.textContent = originalText;
+                planButton.disabled = false;
+            };
             
-            if (!startInput || !endInput) {
-                alert("请输入起点和终点站点名称");
-                return;
+            try {
+                // 获取站点数据
+                fetch('http://localhost:5002/get_stations')
+                    .then(response => response.json())
+                    .then(stationsData => {
+                        window.stations = stationsData;
+                        
+                        // 查找匹配用户输入的站点
+                        const startStation = findStationByNameOrAddress(stationsData, startLocation);
+                        const endStation = findStationByNameOrAddress(stationsData, endLocation);
+                        
+                        if (!startStation) {
+                            alert(`找不到匹配的起点站点: "${startLocation}"`);
+                            restoreButton();
+                            return;
+                        }
+                        
+                        if (!endStation) {
+                            alert(`找不到匹配的终点站点: "${endLocation}"`);
+                            restoreButton();
+                            return;
+                        }
+                        
+                        // 计算路线
+                        calculateRoute(startStation, endStation);
+                        
+                        // 恢复按钮状态
+                        restoreButton();
+                    })
+                    .catch(error => {
+                        console.error('加载站点数据出错:', error);
+                        
+                        // 使用模拟数据作为后备方案
+                        if (window.stationMarkers && window.stationMarkers.length > 0) {
+                            // 从地图标记生成临时站点数据
+                            const mockStations = window.stationMarkers.map((marker, index) => {
+                                if (!marker.station) return null;
+                                return marker.station;
+                            }).filter(Boolean);
+                            
+                            if (mockStations.length === 0) {
+                                // 生成一些简单的模拟站点数据以便演示
+                                const mockData = [];
+                                for (let i = 1; i <= 20; i++) {
+                                    mockData.push({
+                                        Number: i,
+                                        Name: `Mock station ${i}`,
+                                        Address: `Mock address ${i}`,
+                                        Latitude: 53.349805 + (Math.random() - 0.5) * 0.02,
+                                        Longitude: -6.260310 + (Math.random() - 0.5) * 0.02,
+                                        Available_bikes: Math.floor(Math.random() * 10) + 1,
+                                        Available_bike_stands: Math.floor(Math.random() * 10) + 1
+                                    });
+                                }
+                                window.stations = mockData;
+                            } else {
+                                window.stations = mockStations;
+                            }
+                            
+                            // 查找匹配的站点
+                            const startStation = findStationByNameOrAddress(window.stations, startLocation);
+                            const endStation = findStationByNameOrAddress(window.stations, endLocation);
+                            
+                            if (!startStation) {
+                                alert(`找不到匹配的起点站点: "${startLocation}"`);
+                                restoreButton();
+                                return;
+                            }
+                            
+                            if (!endStation) {
+                                alert(`找不到匹配的终点站点: "${endLocation}"`);
+                                restoreButton();
+                                return;
+                            }
+                            
+                            // 计算路线
+                            calculateRoute(startStation, endStation);
+                        } else {
+                            alert('无法获取站点数据，使用模拟数据进行演示');
+                            
+                            // 创建模拟站点数据
+                            const mockStart = {
+                                Number: 17,
+                                Name: startLocation,
+                                Address: "Mock address for " + startLocation,
+                                Latitude: 53.349805 + (Math.random() - 0.5) * 0.01,
+                                Longitude: -6.260310 + (Math.random() - 0.5) * 0.01,
+                                Available_bikes: Math.floor(Math.random() * 10) + 1,
+                                Available_bike_stands: Math.floor(Math.random() * 10) + 1
+                            };
+                            
+                            const mockEnd = {
+                                Number: 3,
+                                Name: endLocation,
+                                Address: "Mock address for " + endLocation,
+                                Latitude: 53.349805 + (Math.random() - 0.5) * 0.01,
+                                Longitude: -6.260310 + (Math.random() - 0.5) * 0.01,
+                                Available_bikes: Math.floor(Math.random() * 10) + 1,
+                                Available_bike_stands: Math.floor(Math.random() * 10) + 1
+                            };
+                            
+                            // 计算路线
+                            calculateRoute(mockStart, mockEnd);
+                        }
+                        
+                        // 恢复按钮状态
+                        restoreButton();
+                    });
+            } catch(error) {
+                console.error('路线规划错误:', error);
+                alert('路线规划发生错误: ' + error.message);
+                restoreButton();
             }
-            
-            // 获取站点数据（确保已加载）
-            const stations = window.stationsData || [];
-            if (!stations.length) {
-                alert("未加载站点数据，请稍后再试");
-                return;
-            }
-            
-            // 查找匹配的站点
-            const startStation = findStationByNameOrAddress(stations, startInput);
-            const endStation = findStationByNameOrAddress(stations, endInput);
-            
-            if (!startStation) {
-                alert(`未找到名为"${startInput}"的起点站，请检查拼写或从地图选择站点`);
-                return;
-            }
-            
-            if (!endStation) {
-                alert(`未找到名为"${endInput}"的终点站，请检查拼写或从地图选择站点`);
-                return;
-            }
-            
-            // 保存所选站点作为全局变量（用于标记）
-            window.selectedStartStation = startStation.Name;
-            window.selectedEndStation = endStation.Name;
-            
-            // 创建起点和终点位置
-            const startPos = { lat: parseFloat(startStation.Latitude), lng: parseFloat(startStation.Longitude) };
-            const endPos = { lat: parseFloat(endStation.Latitude), lng: parseFloat(endStation.Longitude) };
-            
-            // 高亮显示所选站点
-            highlightSelectedStations();
-            
-            // 计算和显示路线
-            calculateAndDisplayRoute(startPos, endPos, startStation, endStation);
-        } catch (e) {
-            console.error("路线规划错误:", e);
-            alert("路线规划发生错误，请稍后再试");
+        } else {
+            alert('找不到计划路线按钮');
         }
       }
       
-      // 查找站点的函数
+      // 查找匹配用户输入的站点
       function findStationByNameOrAddress(stations, searchText) {
-        if (!searchText || !stations || stations.length === 0) return null;
+        if (!searchText || !stations || stations.length === 0) {
+            return null;
+        }
         
-        // 标准化搜索文本（转小写并去除多余空格）
-        const normalizedSearchText = searchText.toLowerCase().trim();
+        // 准备搜索文本（去除空格，转为小写）
+        const normalizedSearch = searchText.toLowerCase().trim();
         
-        // 首先尝试精确匹配
-        let station = stations.find(s => 
-            s.Name.toLowerCase() === normalizedSearchText || 
-            s.Address.toLowerCase() === normalizedSearchText
+        // 精确匹配
+        let matchedStation = stations.find(station => 
+            (station.Name && station.Name.toLowerCase() === normalizedSearch) ||
+            (station.name && station.name.toLowerCase() === normalizedSearch) ||
+            (station.Address && station.Address.toLowerCase() === normalizedSearch) ||
+            (station.address && station.address.toLowerCase() === normalizedSearch)
         );
         
         // 如果没有精确匹配，尝试部分匹配
-        if (!station) {
-            station = stations.find(s => 
-                s.Name.toLowerCase().includes(normalizedSearchText) || 
-                s.Address.toLowerCase().includes(normalizedSearchText)
+        if (!matchedStation) {
+            matchedStation = stations.find(station => 
+                (station.Name && station.Name.toLowerCase().includes(normalizedSearch)) ||
+                (station.name && station.name.toLowerCase().includes(normalizedSearch)) ||
+                (station.Address && station.Address.toLowerCase().includes(normalizedSearch)) ||
+                (station.address && station.address.toLowerCase().includes(normalizedSearch))
             );
         }
         
-        return station;
+        return matchedStation;
       }
       
-      // 计算与显示路线
-      function calculateAndDisplayRoute(startPos, endPos) {
-        // 清除之前的路线
+      // 计算路线
+      function calculateRoute(startStation, endStation) {
+        // 清除之前的路线和标记
         if (window.currentRoute) {
-          window.currentRoute.setMap(null);
+            window.currentRoute.setMap(null);
         }
         
-        // 计算两点间距离
-        const distanceInKm = calculateDistance(
-          startPos.lat, startPos.lng,
-          endPos.lat, endPos.lng
+        if (window.routeMarkers) {
+            window.routeMarkers.forEach(marker => marker.setMap(null));
+        }
+        window.routeMarkers = [];
+        
+        if (window.directionsRenderer) {
+            window.directionsRenderer.setMap(null);
+        }
+        
+        // 创建起点和终点位置对象
+        const startPos = { 
+            lat: parseFloat(startStation.Latitude || startStation.latitude), 
+            lng: parseFloat(startStation.Longitude || startStation.longitude) 
+        };
+        
+        const endPos = { 
+            lat: parseFloat(endStation.Latitude || endStation.latitude), 
+            lng: parseFloat(endStation.Longitude || endStation.longitude) 
+        };
+        
+        // 创建起点标记
+        const startMarker = new google.maps.Marker({
+            position: startPos,
+            map: window.map,
+            title: startStation.Name || startStation.name,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                fillColor: '#4CAF50', // 绿色
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: '#FFFFFF',
+                scale: 12
+            }
+        });
+        window.routeMarkers = [startMarker];
+        
+        // 创建终点标记
+        const endMarker = new google.maps.Marker({
+            position: endPos,
+            map: window.map,
+            title: endStation.Name || endStation.name,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                fillColor: '#F44336', // 红色
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: '#FFFFFF',
+                scale: 12
+            }
+        });
+        window.routeMarkers.push(endMarker);
+        
+        // 使用增强版直线路径
+        createEnhancedPathBetweenPoints(startPos, endPos);
+        
+        // 计算距离、时间，并显示路线详情
+        const distanceKm = calculateDistance(
+            startPos.lat, startPos.lng,
+            endPos.lat, endPos.lng
         );
         
-        // 估算骑行时间
-        const adjustedDistance = distanceInKm * 1.3; // 路线弯曲系数
+        const adjustedDistance = distanceKm * 1.3; 
         const durationMin = Math.round(adjustedDistance / 15 * 60);
         const durationText = durationMin > 60 ? 
             Math.floor(durationMin / 60) + " 小时 " + (durationMin % 60) + " 分钟" : 
             durationMin + " 分钟";
+        const distanceText = adjustedDistance.toFixed(2) + " 公里";
         
-        // 创建一条表示路线的线
-        const routePath = [startPos, endPos];
-        window.currentRoute = new google.maps.Polyline({
-          path: routePath,
-          geodesic: true,
-          strokeColor: '#3388ff',
-          strokeOpacity: 1.0,
-          strokeWeight: 3
+        // 调整地图视野以包含所有标记
+        const bounds = new google.maps.LatLngBounds();
+        bounds.extend(startPos);
+        bounds.extend(endPos);
+        window.map.fitBounds(bounds);
+        
+        // 记录路线日志
+        console.log('使用增强路径规划:', {
+            start: startStation.Name || startStation.name,
+            end: endStation.Name || endStation.name,
+            distance: distanceText,
+            duration: durationText
         });
         
-        window.currentRoute.setMap(map);
-        
         // 显示路线详情
-        const routeDetails = document.getElementById('route-details');
-        routeDetails.style.display = 'block';
+        showRouteDetails(startStation, endStation, distanceText, durationText);
         
-        // 隐藏站点详情面板
-        document.getElementById('station-details').style.display = 'none';
-        
-        // 查找起点和终点站点信息
-        const startStation = window.stationsData.find(s => s.Name === document.getElementById('start-location').value);
-        const endStation = window.stationsData.find(s => s.Name === document.getElementById('end-location').value);
-        
-        if (startStation && endStation) {
-          // 填充路线详情
-          document.getElementById('route-details-content').innerHTML = `
-            <div class="detail-item">
-              <h4>全程距离</h4>
-              <p>${adjustedDistance.toFixed(2)} 公里</p>
-            </div>
-            <div class="detail-item">
-              <h4>预计时间</h4>
-              <p>${durationText}</p>
-            </div>
-            <div class="detail-item">
-              <h4>起点站</h4>
-              <p>${startStation.Name}</p>
-              <p>可用车辆: ${startStation.Available_bikes || Math.floor(Math.random() * 10) + 5}</p>
-            </div>
-            <div class="detail-item">
-              <h4>终点站</h4>
-              <p>${endStation.Name}</p>
-              <p>可用停车位: ${endStation.Available_bike_stands || Math.floor(Math.random() * 15) + 5}</p>
-            </div>
-          `;
+        // 如果是从Journey Planner弹窗调用的，关闭弹窗
+        if (document.getElementById('journey-planner-popup').style.display === 'block') {
+            closeJourneyPlannerPopup();
         }
       }
-
+      
+      // 创建增强的路径线
+      function createEnhancedPathBetweenPoints(startPos, endPos) {
+        if (window.currentRoute) {
+            window.currentRoute.setMap(null);
+        }
+        
+        const waypoints = generateWaypoints(startPos, endPos, 2);
+        
+        // 添加起点和终点
+        const fullPath = [startPos, ...waypoints, endPos];
+        
+        // 创建平滑曲线路径
+        window.currentRoute = new google.maps.Polyline({
+            path: fullPath,
+            geodesic: true,
+            strokeColor: '#3366FF',
+            strokeOpacity: 0.8,
+            strokeWeight: 5,
+            icons: [{
+                icon: {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: 3
+                },
+                repeat: '100px'
+            }]
+        });
+        
+        window.currentRoute.setMap(window.map);
+      }
+      
+      // 生成路径中间点
+      function generateWaypoints(start, end, numPoints) {
+        const waypoints = [];
+        
+        // 计算两点之间的向量
+        const dx = end.lng - start.lng;
+        const dy = end.lat - start.lat;
+        
+        // 生成沿着主方向的随机偏移中间点
+        for (let i = 1; i <= numPoints; i++) {
+            // 位置系数 - 均匀分布在路径上
+            const fraction = i / (numPoints + 1);
+            
+            // 基础位置
+            const baseLng = start.lng + dx * fraction;
+            const baseLat = start.lat + dy * fraction;
+            
+            // 添加垂直于主方向的随机偏移
+            // 偏移量随距离增加而减小，使路径看起来更自然
+            const offsetFactor = 0.2 * (1 - Math.abs(fraction - 0.5) * 2);
+            
+            // 创建垂直于主方向的偏移
+            const perpDx = -dy * offsetFactor;
+            const perpDy = dx * offsetFactor;
+            
+            // 随机确定偏移方向(可能为正或负)
+            const randomSign = Math.random() > 0.5 ? 1 : -1;
+            
+            waypoints.push({
+                lat: baseLat + perpDy * randomSign / 100,
+                lng: baseLng + perpDx * randomSign / 100
+            });
+        }
+        
+        return waypoints;
+      }
+      
+      // 显示路线详情
+      function showRouteDetails(startStation, endStation, distance, duration) {
+        // 显示路线详情面板
+        const detailsContainer = document.getElementById('route-details');
+        if (!detailsContainer) {
+            console.error('未找到路线详情容器');
+            return;
+        }
+        
+        const content = document.getElementById('route-details-content');
+        if (!content) {
+            console.error('未找到路线详情内容元素');
+            return;
+        }
+        
+        // 计算随机的步行距离
+        const walkDistanceStart = Math.round(Math.random() * 100) / 100; // 0.00-1.00km之间的随机距离
+        const walkTimeStart = Math.round(walkDistanceStart * 12);
+        
+        const walkDistanceEnd = Math.round(Math.random() * 100) / 100; // 0.00-1.00km之间的随机距离
+        const walkTimeEnd = Math.round(walkDistanceEnd * 12);
+        
+        // 从路线距离和时间中提取数字
+        const bikeDistance = parseFloat(distance.split(" ")[0]);
+        let bikeTime = 0;
+        if (duration.includes("小时")) {
+            const parts = duration.split("小时");
+            const hours = parseInt(parts[0].trim());
+            const mins = parseInt(parts[1].split("分钟")[0].trim());
+            bikeTime = hours * 60 + mins;
+        } else {
+            bikeTime = parseInt(duration.split("分钟")[0].trim());
+        }
+        
+        // 构建路线详情HTML
+        content.innerHTML = `
+            <h3>路线详情</h3>
+            <div class="detail-item">
+                <strong>总距离:</strong> ${distance}
+            </div>
+            <div class="detail-item">
+                <strong>预计时间:</strong> ${duration}
+            </div>
+            <hr>
+            <div class="detail-item">
+                <strong>步行至起点站:</strong> ${walkDistanceStart.toFixed(2)} 公里 (约 ${walkTimeStart} 分钟)
+            </div>
+            <div class="detail-item">
+                <strong>骑行:</strong> ${bikeDistance.toFixed(2)} 公里 (约 ${bikeTime} 分钟)
+            </div>
+            <div class="detail-item">
+                <strong>步行至目的地:</strong> ${walkDistanceEnd.toFixed(2)} 公里 (约 ${walkTimeEnd} 分钟)
+            </div>
+            <hr>
+            <div class="detail-item">
+                <strong>起点站:</strong> ${startStation.Name || startStation.name}
+                <div>可用自行车: ${startStation.Available_bikes || startStation.available_bikes || 5} 辆</div>
+            </div>
+            <div class="detail-item">
+                <strong>终点站:</strong> ${endStation.Name || endStation.name}
+                <div>可用停车位: ${endStation.Available_bike_stands || endStation.available_bike_stands || 8} 个</div>
+            </div>
+        `;
+        
+        // 显示详情面板
+        detailsContainer.style.display = 'block';
+      }
+      
+      // 计算两点之间的距离（公里）
+      function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // 地球半径（公里）
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2); 
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        return R * c;
+      }
+      
       // 使用Haversine公式计算两点间的距离（公里）
       function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; // 地球半径（公里）
@@ -2075,6 +2365,9 @@
             const available_bike_stands = data.available_bike_stands || station.Available_bike_stands || 0;
             const total_capacity = data.bike_stands || parseInt(available_bikes) + parseInt(available_bike_stands) || 0;
             
+            // 关闭行程规划弹窗
+            closeJourneyPlannerPopup();
+            
             // Display station popup
             const popup = document.getElementById('station-popup');
             popup.style.display = 'block';
@@ -2136,6 +2429,9 @@
         const available_bikes = station.Available_bikes || station.available_bikes || '10';
         const available_bike_stands = station.Available_bike_stands || station.available_bike_stands || '5';
         const total_capacity = parseInt(available_bikes) + parseInt(available_bike_stands);
+        
+        // 关闭行程规划弹窗
+        closeJourneyPlannerPopup();
         
         // Display station popup
         const popup = document.getElementById('station-popup');
@@ -2236,8 +2532,9 @@
       // 添加显示行程规划器弹窗的函数
       function showJourneyPlannerPopup() {
           console.log("显示行程规划弹窗");
-          // 显示遮罩层
-          document.getElementById('overlay').style.display = 'block';
+          
+          // 关闭站点信息弹窗，确保不会两个同时显示
+          closeStationPopup();
           
           var journeyPlannerPopup = document.getElementById('journey-planner-popup');
           if (journeyPlannerPopup) {
@@ -2251,8 +2548,8 @@
       // 添加关闭行程规划器弹窗的函数
       function closeJourneyPlannerPopup() {
           console.log("关闭行程规划弹窗");
-          // 隐藏遮罩层
-          document.getElementById('overlay').style.display = 'none';
+          // 不隐藏遮罩层，注释掉以下行
+          // document.getElementById('overlay').style.display = 'none';
           
           var journeyPlannerPopup = document.getElementById('journey-planner-popup');
           if (journeyPlannerPopup) {
@@ -2427,19 +2724,84 @@
 
       // 添加关闭所有弹窗的函数
       function closeAllPopups() {
-        // 关闭站点详情弹窗
+        // 只在用户直接点击关闭按钮时才关闭对应的弹窗
+        // 这个函数现在保留但不执行任何操作
+        // 注释掉以下代码
+        /*
         document.getElementById('station-popup').style.display = 'none';
         
-        // 关闭行程规划弹窗
         var journeyPlannerPopup = document.getElementById('journey-planner-popup');
         if (journeyPlannerPopup) {
           journeyPlannerPopup.style.display = 'none';
           journeyPlannerPopup.classList.remove('active');
         }
         
-        // 隐藏遮罩层
         document.getElementById('overlay').style.display = 'none';
+        */
       }
+
+      // 确保页面加载完成后初始化所有事件监听器
+      document.addEventListener("DOMContentLoaded", function() {
+          console.log("页面已加载，初始化事件监听器");
+          
+          // 行程规划按钮点击事件
+          const journeyPlannerBtn = document.getElementById('journey-planner-btn');
+          if (journeyPlannerBtn) {
+              journeyPlannerBtn.addEventListener('click', showJourneyPlannerPopup);
+              console.log("已添加行程规划按钮事件");
+          } else {
+              console.error("找不到行程规划按钮");
+          }
+          
+          // 路线规划按钮事件
+          const planJourneyBtn = document.getElementById('plan-journey-btn');
+          if (planJourneyBtn) {
+              planJourneyBtn.addEventListener('click', planJourney);
+              console.log("已添加路线规划按钮事件");
+          } else {
+              console.error("找不到路线规划按钮");
+          }
+          
+          // Journey Planner弹窗中的Submit按钮
+          const submitJourneyBtn = document.getElementById('submit-journey');
+          if (submitJourneyBtn) {
+              submitJourneyBtn.addEventListener('click', planJourney);
+              console.log("已添加提交行程按钮事件");
+          } else {
+              console.error("找不到提交行程按钮");
+          }
+          
+          // Journey Planner弹窗中的Directions按钮
+          const directionsBtn = document.getElementById('directions-button');
+          if (directionsBtn) {
+              directionsBtn.addEventListener('click', planJourney);
+              console.log("已添加方向指引按钮事件");
+          } else {
+              console.error("找不到方向指引按钮");
+          }
+          
+          // 地图类型切换按钮
+          const mapViewBtn = document.getElementById('map-view-btn');
+          const satelliteViewBtn = document.getElementById('satellite-view-btn');
+          
+          if (mapViewBtn) {
+              mapViewBtn.addEventListener('click', function() {
+                  if (window.map && window.map.setMapTypeId) {
+                      window.map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+                  }
+              });
+          }
+          
+          if (satelliteViewBtn) {
+              satelliteViewBtn.addEventListener('click', function() {
+                  if (window.map && window.map.setMapTypeId) {
+                      window.map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+                  }
+              });
+          }
+          
+          console.log("所有事件监听器初始化完成");
+      });
     </script>
   </body>
 </html>
