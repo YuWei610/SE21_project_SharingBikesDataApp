@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="",
+  password="zx9426498",
   database="se21_local",
 )
 
@@ -138,5 +138,5 @@ def index():
     # return render_template('dublin_bikes_app.html', api_key = "AIzaSyCRiKA7AmZItAl0gwzFRJpN8jjQuyPYv68")
 
 if __name__ == "__main__":
-    app.run(host = "0.0.0.0", port=5000)
+    app.run(host = "0.0.0.0", port=5001)
 
