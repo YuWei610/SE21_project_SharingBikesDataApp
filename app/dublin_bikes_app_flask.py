@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template, request
 import mysql.connector
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import os
 import requests
 import dbinfo
@@ -15,7 +15,7 @@ import joblib
 bike_model = joblib.load("ML_function/bike_availability_model.pkl")
 stand_model = joblib.load("ML_function/bike_stand_availability_model.pkl")
 
-# load_dotenv()
+load_dotenv()
 
 # Connect to EC2 MySQL db to access static station data.
 mydb = mysql.connector.connect(
