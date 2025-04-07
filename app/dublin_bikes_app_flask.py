@@ -17,21 +17,22 @@ stand_model = joblib.load("ML_function/bike_stand_availability_model.pkl")
 
 # load_dotenv()
 
-#Connect to local db to access static station data.
-# mydb = mysql.connector.connect(
-#   host=os.getenv("host"),
-#   user=os.getenv("user"),
-#   password=os.getenv("password"),
-#   database=os.getenv("database")
-# )
-
 # Connect to EC2 MySQL db to access static station data.
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="zx9426498",
-  database="se21_local",
+  host=os.getenv("host"),
+  user=os.getenv("user"),
+  password=os.getenv("password"),
+  database=os.getenv("database"),
+  port=int(os.getenv("port"))
 )
+
+
+# mydb = mysql.connector.connect(
+#   host="localhost",
+#   user="root",
+#   password="zx9426498",
+#   database="se21_local",
+# )
 
 mycursor = mydb.cursor()
 
