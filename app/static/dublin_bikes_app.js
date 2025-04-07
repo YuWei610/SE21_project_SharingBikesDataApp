@@ -1358,9 +1358,9 @@ function populateStationSelect() {
   // 如果有站点数据，填充选项
   if (window.allStations && window.allStations.length > 0) {
     // 按站点名称排序
-    const sortedStations = [...window.allStations].sort((a, b) => {
-      return a.Name.localeCompare(b.Name);
-    });
+    const sortedStations = [...window.allStations]
+      .filter((s) => s.Name || s.name)
+      .sort((a, b) => (a.Name || a.name).localeCompare(b.Name || b.name));
 
     // 添加选项
     sortedStations.forEach((station) => {
