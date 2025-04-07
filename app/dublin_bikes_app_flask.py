@@ -42,8 +42,9 @@ app = Flask(__name__, static_url_path="")
 @app.route('/stations', methods=['GET'])
 def get_stations():
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM station")
+    mycursor.execute("SELECT * FROM se21_local.station")
     rows = mycursor.fetchall()
+    print("get_stations - DB result :", rows)
     return jsonify(rows)
 
 # Second route. Fetching dynamic info directly from JcDecaux. When user clicks on a marker a API request is completed to get the up 
