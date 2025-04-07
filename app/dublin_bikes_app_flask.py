@@ -33,7 +33,12 @@ except Exception as e:
 
 mycursor = mydb.cursor()
 
+from flask_cors import CORS
+
 app = Flask(__name__, static_url_path="")
+CORS(app)
+
+
 
 # First route. Connect to the stations table, fetch the data and return as json.
 @app.route('/get_stations', methods=['GET'])
