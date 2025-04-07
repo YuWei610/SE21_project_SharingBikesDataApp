@@ -207,6 +207,54 @@ def get_all_stations():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/get_weather_summary', methods=['GET'])
+def get_weather_summary():
+    try:
+        # 都柏林中心經緯度
+        lat, lon = 53.349805, -6.26031
+        
+        # 調用你已經寫好的 call_api_weather 函式
+        weather_data = call_api_weather(lat, lon)
+        current_weather = weather_data.get("current", {})
+
+        # 改為攝氏溫度（API 給的是 Kelvin）
+        temp_celsius = round(current_weather.get("temp", 273.15) - 273.15, 2)
+        description = current_weather.get("weather", [{}])[0].get("description", "N/A").capitalize()
+
+        summary = f"Dublin: {temp_celsius}°C, {description}"
+
+        return jsonify({"summary": summary})
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# homepage weather information
+@app.route('/get_weather_summary', methods=['GET'])
+def get_weather_summary():
+    try:
+        # Coordinates for Dublin city center
+        lat, lon = 53.349805, -6.26031
+        
+        # Call your existing weather API wrapper function
+        weather_data = call_api_weather(lat, lon)
+        current_weather = weather_data.get("current", {})
+
+        # Convert temperature from Kelvin to Celsius
+        temp_celsius = round(current_weather.get("temp", 273.15) - 273.15, 2)
+
+        # Get weather description and capitalize it (e.g., "clear sky")
+        description = current_weather.get("weather", [{}])[0].get("description", "N/A").capitalize()
+
+        # Format summary string
+        summary = f"Dublin: {temp_celsius}°C, {description}"
+
+        # Return summary to frontend
+        return jsonify({"summary": summary})
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 # 新增API端点：根据站点和时间筛选数据
 @app.route('/filter_data', methods=['POST'])
 def filter_data():
