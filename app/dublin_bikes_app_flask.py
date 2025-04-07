@@ -38,12 +38,25 @@ app = Flask(__name__, static_url_path="")
 # First route. Connect to the stations table, fetch the data and return as json.
 @app.route('/get_stations', methods=['GET'])
 def get_stations():
-    mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM station")
-    rows = mycursor.fetchall()
-    print("get_stations - DB result :", rows, flush=True)
-
-    return jsonify(rows)
+    try:
+        conn = mysql.connector.connect(
+            host=os.getenv("host"),
+            user=os.getenv("user"),
+            password=os.getenv("password"),
+            database=os.getenv("database"),
+            port=int(os.getenv("port"))
+        )
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM station")
+        rows = cursor.fetchall()
+        print("get_stations - DB result:", rows, flush=True)
+        cursor.close()
+        conn.close()
+        return jsonify(rows)
+    
+    except Exception as e:
+        print("❌ DB query error:", e, flush=True)
+        return jsonify({"error": str(e)}), 500
 
 # Second route. Fetching dynamic info directly from JcDecaux. When user clicks on a marker a API request is completed to get the up 
 # to date dynamic info.
