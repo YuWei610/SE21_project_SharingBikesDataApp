@@ -17,33 +17,32 @@ stand_model = joblib.load("ML_function/bike_stand_availability_model.pkl")
 
 load_dotenv()
 
-# Connect to EC2 MySQL db to access static station data.
-mydb = mysql.connector.connect(
-  host=os.getenv("host"),
-  user=os.getenv("user"),
-  password=os.getenv("password"),
-  database=os.getenv("database"),
-  port=int(os.getenv("port"))
-)
+try:
+    # Connect to EC2 MySQL db to access static station data.
+    mydb = mysql.connector.connect(
+        host=os.getenv("host"),
+        user=os.getenv("user"),
+        password=os.getenv("password"),
+        database=os.getenv("database"),
+        port=int(os.getenv("port"))
+    )
+    print("✅ Database connected!", flush=True)
+except Exception as e:
+    print("❌ Database connection failed:", e, flush=True)
 
-
-# mydb = mysql.connector.connect(
-#   host="localhost",
-#   user="root",
-#   password="zx9426498",
-#   database="se21_local",
-# )
 
 mycursor = mydb.cursor()
 
 app = Flask(__name__, static_url_path="")
 
 # First route. Connect to the stations table, fetch the data and return as json.
-@app.route('/stations', methods=['GET'])
+@app.route('/get_stations', methods=['GET'])
 def get_stations():
     mycursor = mydb.cursor(dictionary=True)
-    mycursor.execute("SELECT * FROM se21_local.station")
+    mycursor.execute("SELECT * FROM station")
     rows = mycursor.fetchall()
+    print("get_stations - DB result :", rows, flush=True)
+
     return jsonify(rows)
 
 # Second route. Fetching dynamic info directly from JcDecaux. When user clicks on a marker a API request is completed to get the up 
