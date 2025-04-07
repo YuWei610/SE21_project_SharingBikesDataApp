@@ -2262,3 +2262,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// 頁面載入後自動初始化地圖
+window.onload = function () {
+  if (typeof google === "undefined") {
+    console.log("Google Maps API 不可用，使用备用地图显示");
+    initMapWithoutAPI();
+  } else {
+    initMap();
+  }
+};
