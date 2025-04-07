@@ -65,7 +65,7 @@ function initMap() {
 // 加载自行车站点数据的函数
 function loadStations(map) {
   // 从dublin.csv加载数据或通过API获取
-  fetch("http://localhost:5002/get_stations")
+  fetch("http://localhost:5000/get_stations")
     .then((response) => response.json())
     .then((data) => {
       // 保存站点数据到全局，以便路线规划使用
@@ -486,7 +486,7 @@ function planJourney() {
 
     try {
       // 获取站点数据
-      fetch("http://localhost:5002/get_stations")
+      fetch("http://localhost:5000/get_stations")
         .then((response) => response.json())
         .then((stationsData) => {
           window.stations = stationsData;
@@ -970,7 +970,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("click", showJourneyPlannerPopup);
 
   // 加载站点数据并填充选择器
-  fetch("http://localhost:5002/get_stations")
+  fetch("http://localhost:5000/get_stations")
     .then((response) => response.json())
     .then((stations) => {
       window.stationsData = stations;
@@ -1027,7 +1027,7 @@ function updateStationCharts(stationId) {
   console.log(`更新站点 ${stationId} 的统计图表`);
 
   // 尝试从后端获取特定站点数据
-  fetch(`http://localhost:5002/get_station_hourly_data/${stationId}`)
+  fetch(`http://localhost:5000/get_station_hourly_data/${stationId}`)
     .then((response) => response.json())
     .then((data) => {
       const hours = Array.from({ length: 13 }, (_, i) => i + 10);
@@ -1477,7 +1477,7 @@ function clearRouteAndMarkers() {
 function showStationInfoInPopup(station, selectionMessage) {
   // Get real-time station availability data
   fetch(
-    `http://localhost:5002/get_station_details/${
+    `http://localhost:5000/get_station_details/${
       station.Number || station.number
     }`
   )
@@ -1617,7 +1617,7 @@ function fallbackStationInfo(station, selectionMessage) {
 
 // Fetch station hourly data from API
 function fetchStationHourlyData(stationId) {
-  fetch(`http://localhost:5002/get_station_hourly_data/${stationId}`)
+  fetch(`http://localhost:5000/get_station_hourly_data/${stationId}`)
     .then((response) => response.json())
     .then((data) => {
       if (data && data.bikes && data.stands) {
