@@ -7,7 +7,7 @@ import sys
 import os
 import pandas as pd
 # import api_config
-import api_config
+from . import api_config
 
 """
 api_config.API_CONFIG:
@@ -28,10 +28,10 @@ def call_api_single_stations(station_id):
         r = requests.get(url , params={"apiKey": api_config.API_CONFIG["stations_v3"]["apiKey"], "contract": api_config.API_CONFIG["stations_v3"]["contract"]}, headers=headers)
         print(r.status_code)
         print(r.text)
-        # data = r.json() 
-        print("Return type : ", type(r.text))
-        print("Return content : ", r.text)
-        return r.text
-    except:
+        # 返回JSON而不是文本
+        data = r.json()
+        print("Return type : ", type(data))
+        return data
+    except Exception as e:
         print(traceback.format_exc())
-        return traceback.format_exc()
+        return {"error": str(e)}
