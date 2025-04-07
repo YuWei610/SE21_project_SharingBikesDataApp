@@ -208,26 +208,26 @@ def get_all_stations():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/get_weather_summary', methods=['GET'])
-def get_weather_summary():
-    try:
-        # 都柏林中心經緯度
-        lat, lon = 53.349805, -6.26031
+# @app.route('/get_weather_summary', methods=['GET'])
+# def get_weather_summary():
+#     try:
+#         # 都柏林中心經緯度
+#         lat, lon = 53.349805, -6.26031
         
-        # 調用你已經寫好的 call_api_weather 函式
-        weather_data = call_api_weather(lat, lon)
-        current_weather = weather_data.get("current", {})
+#         # 調用你已經寫好的 call_api_weather 函式
+#         weather_data = call_api_weather(lat, lon)
+#         current_weather = weather_data.get("current", {})
 
-        # 改為攝氏溫度（API 給的是 Kelvin）
-        temp_celsius = round(current_weather.get("temp", 273.15) - 273.15, 2)
-        description = current_weather.get("weather", [{}])[0].get("description", "N/A").capitalize()
+#         # 改為攝氏溫度（API 給的是 Kelvin）
+#         temp_celsius = round(current_weather.get("temp", 273.15) - 273.15, 2)
+#         description = current_weather.get("weather", [{}])[0].get("description", "N/A").capitalize()
 
-        summary = f"Dublin: {temp_celsius}°C, {description}"
+#         summary = f"Dublin: {temp_celsius}°C, {description}"
 
-        return jsonify({"summary": summary})
+#         return jsonify({"summary": summary})
     
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 # homepage weather information
 @app.route('/get_weather_summary', methods=['GET'])
