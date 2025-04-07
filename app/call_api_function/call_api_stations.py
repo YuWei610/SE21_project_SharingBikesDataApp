@@ -8,7 +8,7 @@ import os
 import pandas as pd
 
 # import api_config
-import api_config
+from . import api_config
 
 """
 api_config.API_CONFIG:
