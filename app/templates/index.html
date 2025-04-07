@@ -161,13 +161,15 @@
             padding: 15px;
             z-index: 1000;
             width: 280px;
-            transition: all 0.3s ease;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         
         .filter-modal h3 {
             margin-top: 0;
             margin-bottom: 15px;
-            font-size: 16px;
+            font-size: 18px;
             color: #333;
             display: flex;
             justify-content: space-between;
@@ -178,107 +180,150 @@
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             color: #999;
         }
         
-        .filter-modal .form-group {
-            margin-bottom: 12px;
+        .form-group {
+            margin-bottom: 15px;
         }
         
-        .filter-modal label {
+        .form-group label {
             display: block;
             margin-bottom: 5px;
             font-size: 14px;
             color: #555;
         }
         
-        .filter-modal select {
+        .form-group select {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            background-color: #f9f9f9;
+            background-color: white;
         }
         
-        .filter-modal .actions {
+        .actions {
             display: flex;
             justify-content: space-between;
             margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
         }
         
-        .filter-modal button {
-            padding: 8px 15px;
+        .actions button {
+            padding: 8px 16px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
+            font-weight: bold;
         }
         
-        .filter-modal .apply-btn {
-            background-color: #4285f4;
-            color: white;
-        }
-        
-        .filter-modal .reset-btn {
+        .reset-btn {
             background-color: #f1f1f1;
             color: #333;
         }
         
-        /* 浮窗触发按钮 */
-        .filter-trigger {
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            background: white;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            cursor: pointer;
-            z-index: 1000;
+        .apply-btn {
+            background-color: #4285f4;
+            color: white;
         }
         
-        .filter-trigger i {
-            font-size: 24px;
-            color: #555;
-        }
-        
-        /* 折叠状态 */
-        .filter-modal.collapsed {
-            transform: translateX(110%);
-        }
-
-        /* 筛选结果区域样式 */
+        /* 筛选结果样式 */
         .filter-results {
             margin-top: 15px;
             border-top: 1px solid #eee;
             padding-top: 15px;
         }
         
-        .filter-results h4 {
-            margin: 0 0 10px 0;
-            font-size: 14px;
-            color: #333;
+        .filter-results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
         }
         
-        .results-content {
-            max-height: 200px;
-            overflow-y: auto;
+        .filter-results-table th,
+        .filter-results-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .filter-results-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        
+        .filter-results-table tr:hover {
             background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            height: 16px;
+            background-color: #eee;
+            border-radius: 3px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .progress-bar span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #333;
+            font-size: 11px;
+            line-height: 16px;
+            font-weight: bold;
+            text-shadow: 0 0 2px white;
+        }
+        
+        .results-count {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #777;
+            text-align: right;
+        }
+        
+        .error-text {
+            color: #f44336;
         }
         
         .placeholder-text {
             color: #999;
             font-style: italic;
             text-align: center;
-            margin: 10px 0;
+        }
+        
+        /* 筛选触发器样式 */
+        .filter-trigger {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 900;
+            font-size: 20px;
+        }
+        
+        .filter-trigger:hover {
+            background-color: #f5f5f5;
         }
 
         /* 站点详情弹窗样式 */
@@ -302,35 +347,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
-            margin-bottom: 15px;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
         }
         
         .station-popup-header h3 {
             margin: 0;
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 18px;
         }
         
         .station-popup-close {
             background: none;
             border: none;
-            cursor: pointer;
             font-size: 20px;
-            color: #888;
-            transition: color 0.2s;
-            padding: 0;
-            line-height: 1;
-        }
-        
-        .station-popup-close:hover {
-            color: #333;
+            cursor: pointer;
+            color: #666;
         }
         
         /* 站点信息内容区域样式 */
         .station-popup-body {
-            padding: 0;
+            padding: 15px;
         }
         
         .station-popup-info {
@@ -356,29 +392,31 @@
             font-weight: 500;
         }
         
+        /* 站点弹窗按钮样式 */
         .station-popup-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            justify-content: space-around;
+            margin-top: 20px;
             padding-top: 15px;
-            border-top: 1px solid #f0f0f0;
+            border-top: 1px solid #e0e0e0;
         }
         
         .station-popup-btn {
             flex: 1;
+            margin: 0 5px;
             padding: 12px;
             border: none;
             border-radius: 4px;
+            color: white;
+            font-weight: bold;
             cursor: pointer;
             font-size: 15px;
             text-align: center;
-            font-weight: 600;
             transition: background-color 0.2s;
         }
         
         .station-popup-btn.start {
             background-color: #4285f4;
-            color: white;
         }
         
         .station-popup-btn.start:hover {
@@ -387,7 +425,6 @@
         
         .station-popup-btn.end {
             background-color: #34a853;
-            color: white;
         }
         
         .station-popup-btn.end:hover {
@@ -664,6 +701,31 @@
             border-radius: 4px;
             font-size: 14px;
         }
+
+        /* 站点弹窗样式 - 恢复左侧位置 */
+        .station-popup {
+            position: absolute;
+            top: 60px; /* 与导航栏底部对齐 */
+            left: 0;
+            width: 350px; /* 与侧边栏宽度相同 */
+            height: calc(100vh - 60px); /* 视口高度减去导航栏高度 */
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            padding: 15px;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        /* 移除station-popup-actions的固定位置 */
+        .station-popup-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            margin-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
     </style>
 </head>
 <body>
@@ -799,20 +861,20 @@
     <!-- 添加筛选浮窗 -->
     <div id="filter-modal" class="filter-modal collapsed">
         <h3>
-            数据筛选
+            Data Filter
             <button onclick="toggleFilterModal()">✕</button>
         </h3>
         
         <div class="form-group">
-            <label for="station-select">选择站点:</label>
+            <label for="station-select">Select Station:</label>
             <select id="station-select">
-                <option value="">所有站点</option>
-                <!-- 站点选项将由JavaScript动态填充 -->
+                <option value="">All Stations</option>
+                <!-- Station options will be dynamically populated by JavaScript -->
             </select>
             </div>
         
         <div class="form-group">
-            <label for="time-select">选择时刻:</label>
+            <label for="time-select">Select Time:</label>
             <select id="time-select">
                 <option value="0">00:00</option>
                 <option value="1">01:00</option>
@@ -842,18 +904,18 @@
         </div>
         
         <div class="actions">
-            <button class="reset-btn" onclick="resetFilters()">重置</button>
-            <button class="apply-btn" onclick="applyFilters()">应用</button>
+            <button class="reset-btn" onclick="resetFilters()">Reset</button>
+            <button class="apply-btn" onclick="applyFilters()">Apply</button>
     </div>
 
-        <!-- 新增数据结果显示区域 -->
+        <!-- Data Results Display Area -->
         <div id="filter-results" class="filter-results">
             <div class="results-header">
-                <h4>筛选结果</h4>
+                <h4>Filter Results</h4>
             </div>
             <div class="results-content">
-                <!-- 这里会显示后端返回的数据 -->
-                <p class="placeholder-text">应用筛选后将显示结果...</p>
+                <!-- Backend data will be displayed here -->
+                <p class="placeholder-text">Results will be displayed after applying filters...</p>
             </div>
         </div>
     </div>
@@ -865,6 +927,11 @@
         <button class="station-popup-close" onclick="closeStationPopup()">✕</button>
       </div>
       <div class="station-popup-body">
+        <!-- 添加跳转到行程规划的按钮 -->
+        <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+          <button id="to-journey-planner-btn" style="background-color: #4285f4; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Plan My Journey</button>
+        </div>
+        
         <div class="station-popup-info" id="station-popup-content">
           <!-- 站点信息将动态填充 -->
         </div>
@@ -883,11 +950,12 @@
             <div class="time-labels" id="stands-time-labels"></div>
           </div>
         </div>
-      </div>
-      
-      <div class="station-popup-actions">
-        <button class="station-popup-btn start" id="set-as-start-btn">Set as Start</button>
-        <button class="station-popup-btn end" id="set-as-end-btn">Set as End</button>
+        
+        <!-- 将按钮移到图表底部 -->
+        <div class="station-popup-actions" style="margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 15px;">
+          <button class="station-popup-btn start" id="set-as-start-btn">Set as Start</button>
+          <button class="station-popup-btn end" id="set-as-end-btn">Set as End</button>
+        </div>
       </div>
     </div>
     
@@ -898,6 +966,10 @@
         <button class="station-popup-close" onclick="closeJourneyPlannerPopup()">✕</button>
       </div>
       <div class="station-popup-body">
+        <!-- 添加返回站点详情的按钮 -->
+        <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+          <button id="back-to-station-btn" style="background-color: #f44336; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Back to Station Details</button>
+        </div>
         <div class="journey-planner-content">
           <!-- 日期选择 -->
           <div class="date-selector">
@@ -1152,6 +1224,9 @@
         if (!station.Available_bike_stands) station.Available_bike_stands = Math.floor(Math.random() * 15) + 5;
         const totalCapacity = parseInt(station.Available_bikes) + parseInt(station.Available_bike_stands);
         
+        // 保存当前站点信息到全局变量，以便后续使用
+        window.lastSelectedStation = station;
+        
         // 关闭行程规划弹窗，确保不会两个同时显示
         closeJourneyPlannerPopup();
         
@@ -1178,14 +1253,17 @@
         // 设置按钮点击事件
         const startBtn = document.getElementById('set-as-start-btn');
         const endBtn = document.getElementById('set-as-end-btn');
+        const toJourneyBtn = document.getElementById('to-journey-planner-btn');
         
         // 清除旧事件监听器
         startBtn.replaceWith(startBtn.cloneNode(true));
         endBtn.replaceWith(endBtn.cloneNode(true));
+        toJourneyBtn.replaceWith(toJourneyBtn.cloneNode(true));
         
         // 获取新的按钮引用
         const newStartBtn = document.getElementById('set-as-start-btn');
         const newEndBtn = document.getElementById('set-as-end-btn');
+        const newToJourneyBtn = document.getElementById('to-journey-planner-btn');
         
         // 添加新的事件监听器
         newStartBtn.addEventListener('click', function() {
@@ -1196,6 +1274,12 @@
         newEndBtn.addEventListener('click', function() {
           setAsEnd(station.Name);
           closeStationPopup();
+        });
+        
+        // 添加跳转到行程规划的事件监听器
+        newToJourneyBtn.addEventListener('click', function() {
+          closeStationPopup();
+          showJourneyPlannerPopup();
         });
       }
       
@@ -2214,105 +2298,57 @@
         }
       }
       
-      // 应用筛选条件
+      // 应用筛选
       function applyFilters() {
-        const stationId = document.getElementById('station-select').value;
-        const timeValue = document.getElementById('time-select').value;
-        
-        // 设置起点和终点站点选择
-        if (stationId) {
-          // 如果选择了特定站点，更新出行计划
-          const station = window.allStations.find(s => s.Number == stationId);
-          if (station) {
-            document.getElementById('start-location').value = station.Name;
-            // 随机选择一个不同的站点作为终点
-            const otherStations = window.allStations.filter(s => s.Number != stationId);
-            if (otherStations.length > 0) {
-              const randomEndStation = otherStations[Math.floor(Math.random() * otherStations.length)];
-              document.getElementById('end-location').value = randomEndStation.Name;
-              
-              // 触发路线规划
-              planJourney();
-            }
+          const stationId = document.getElementById('station-select').value;
+          const timeValue = document.getElementById('time-select').value;
+          
+          // 如果没有选择站点，显示错误消息
+          if (!stationId) {
+              const resultsContent = document.getElementById('filter-results');
+              resultsContent.querySelector('.results-content').innerHTML = '<p class="error-text">Please select a station</p>';
+              return;
           }
-        }
-        
-        // 从后端获取筛选结果
-        fetchFilterResults(stationId, timeValue);
-      }
-      
-      // 从后端获取筛选结果
-      function fetchFilterResults(stationId, timeValue) {
-        const resultsContent = document.querySelector('.results-content');
-        resultsContent.innerHTML = '<p>正在加载数据...</p>';
-        
-        // 构建查询参数
-        const params = new URLSearchParams();
-        if (stationId) params.append('station_id', stationId);
-        params.append('time', timeValue);
-        
-        // 发送请求到后端API
-        fetch(`http://localhost:5002/get_filtered_data?${params.toString()}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('网络请求失败');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // 显示返回的数据
-                displayFilterResults(data);
-            })
-            .catch(error => {
-                console.error('获取筛选数据失败:', error);
-                displayMockFilterResults(stationId, timeValue);
-            });
-      }
-      
-      // 显示筛选结果
-      function displayFilterResults(data) {
-        const resultsContent = document.querySelector('.results-content');
-        
-        if (!data || Object.keys(data).length === 0) {
-            resultsContent.innerHTML = '<p class="placeholder-text">没有找到匹配的数据</p>';
-                return;
+          
+          // 显示加载中提示
+          const resultsContent = document.getElementById('filter-results');
+          resultsContent.querySelector('.results-content').innerHTML = '<p style="text-align:center">Loading...</p>';
+          
+          // 发送请求到predict_availability接口
+          fetch('/predict_availability', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  station_id: stationId,
+                  hour: timeValue
+              }),
+          })
+          .then(response => response.json())
+          .then(data => {
+              // 处理筛选结果
+              const resultsContent = document.getElementById('filter-results').querySelector('.results-content');
+              
+              // 检查是否有错误
+              if (data.error) {
+                  resultsContent.innerHTML = `<p class="error-text">Error: ${data.error}</p>`;
+                  return;
               }
               
-        // 创建结果HTML
-        let html = '<div class="results-data">';
-        
-        if (data.summary) {
-            html += `<p><strong>概要:</strong> ${data.summary}</p>`;
-        }
-        
-        if (data.details) {
-            html += '<ul>';
-            Object.entries(data.details).forEach(([key, value]) => {
-                html += `<li><strong>${key}:</strong> ${value}</li>`;
-            });
-            html += '</ul>';
-        }
-        
-        html += '</div>';
-        resultsContent.innerHTML = html;
-      }
-      
-      function displayMockFilterResults(stationId, timeValue) {
-        const resultsContent = document.querySelector('.results-content');
-        const time = timeValue || '全天';
-        const station = stationId ? `站点 ${stationId}` : '所有站点';
-        
-        const mockData = {
-            summary: `${station} 在 ${time}:00 的数据`,
-            details: {
-                '平均可用车辆': Math.floor(Math.random() * 10) + 5,
-                '平均可用车位': Math.floor(Math.random() * 15) + 10,
-                '使用率': `${Math.floor(Math.random() * 100)}%`,
-                '数据采集时间': new Date().toLocaleString()
-            }
-        };
-        
-        displayFilterResults(mockData);
+              // 使用要求的格式显示结果（全英文）
+              resultsContent.innerHTML = `
+                  <div class="prediction-result">
+                      <p style="font-size: 18px; margin: 10px 0;"><strong>Bikes:</strong> ${data.bikes}</p>
+                      <p style="font-size: 18px; margin: 10px 0;"><strong>Stands:</strong> ${data.bike_stands}</p>
+                  </div>
+              `;
+          })
+          .catch(error => {
+              console.error('Error filtering data:', error);
+              const resultsContent = document.getElementById('filter-results').querySelector('.results-content');
+              resultsContent.innerHTML = '<p class="error-text">Error getting data, please try again</p>';
+          });
       }
       
       // 重置筛选条件
@@ -2404,15 +2440,11 @@
             // Add new event listeners
             newStartBtn.addEventListener('click', function() {
               selectAsStart(station.Name || station.name);
-              window.selectionMode = 'end';
-              updateSelectionModeIndicator();
               closeStationPopup();
             });
             
             newEndBtn.addEventListener('click', function() {
-              selectAsEnd(station.Name || station.name);
-              window.selectionMode = 'start';
-              updateSelectionModeIndicator();
+              setAsEnd(station.Name || station.name);
               closeStationPopup();
             });
           })
@@ -2540,6 +2572,25 @@
           if (journeyPlannerPopup) {
               journeyPlannerPopup.style.display = 'block';
               journeyPlannerPopup.classList.add('active');
+              
+              // 添加返回站点详情的事件处理
+              const backToStationBtn = document.getElementById('back-to-station-btn');
+              
+              // 清除旧事件监听器
+              backToStationBtn.replaceWith(backToStationBtn.cloneNode(true));
+              
+              // 获取新按钮引用
+              const newBackBtn = document.getElementById('back-to-station-btn');
+              
+              // 添加事件监听
+              newBackBtn.addEventListener('click', function() {
+                  if(window.lastSelectedStation) {
+                      closeJourneyPlannerPopup();
+                      showStationInfoInSidebar(window.lastSelectedStation);
+                  } else {
+                      console.log("无法返回站点详情：未找到上一个站点信息");
+                  }
+              });
           } else {
               console.error("找不到行程规划弹窗元素");
           }
@@ -2548,6 +2599,7 @@
       // 添加关闭行程规划器弹窗的函数
       function closeJourneyPlannerPopup() {
           console.log("关闭行程规划弹窗");
+          
           // 不隐藏遮罩层，注释掉以下行
           // document.getElementById('overlay').style.display = 'none';
           
@@ -2801,6 +2853,249 @@
           }
           
           console.log("所有事件监听器初始化完成");
+      });
+
+      // 添加各种全局变量
+      window.stationMarkers = [];
+      window.lastSelectedStation = null; // 存储上次选中的站点信息
+      
+      // 筛选功能相关代码
+      // 显示/隐藏筛选模态窗口
+      function toggleFilterModal() {
+          const modal = document.getElementById('filter-modal');
+          if (modal.style.display === 'block') {
+              modal.style.display = 'none';
+          } else {
+              modal.style.display = 'block';
+              // 如果站点下拉列表为空，则加载站点列表
+              loadStationOptions();
+          }
+      }
+      
+      // 加载站点列表到下拉菜单
+      function loadStationOptions() {
+          const stationSelect = document.getElementById('station-select');
+          
+          // 避免重复加载
+          if (stationSelect.options.length <= 1) {
+              fetch('/get_all_stations')
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.stations && data.stations.length > 0) {
+                          data.stations.forEach(station => {
+                              const option = document.createElement('option');
+                              option.value = station.number;
+                              option.textContent = station.name;
+                              stationSelect.appendChild(option);
+                          });
+                          console.log(`加载了 ${data.stations.length} 个站点选项`);
+                      } else {
+                          console.warn("没有获取到站点数据");
+                      }
+                  })
+                  .catch(error => {
+                      console.error("加载站点列表出错:", error);
+                  });
+          }
+      }
+      
+      // 应用筛选
+      function applyFilters() {
+          const stationId = document.getElementById('station-select').value;
+          const timeValue = document.getElementById('time-select').value;
+          
+          // 如果没有选择站点，显示错误消息
+          if (!stationId) {
+              const resultsContent = document.getElementById('filter-results');
+              resultsContent.querySelector('.results-content').innerHTML = '<p class="error-text">Please select a station</p>';
+              return;
+          }
+          
+          // 显示加载中提示
+          const resultsContent = document.getElementById('filter-results');
+          resultsContent.querySelector('.results-content').innerHTML = '<p style="text-align:center">Loading...</p>';
+          
+          // 发送请求到predict_availability接口
+          fetch('/predict_availability', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  station_id: stationId,
+                  hour: timeValue
+              }),
+          })
+          .then(response => response.json())
+          .then(data => {
+              // 处理筛选结果
+              const resultsContent = document.getElementById('filter-results').querySelector('.results-content');
+              
+              // 检查是否有错误
+              if (data.error) {
+                  resultsContent.innerHTML = `<p class="error-text">Error: ${data.error}</p>`;
+                  return;
+              }
+              
+              // 使用要求的格式显示结果（全英文）
+              resultsContent.innerHTML = `
+                  <div class="prediction-result">
+                      <p style="font-size: 18px; margin: 10px 0;"><strong>Bikes:</strong> ${data.bikes}</p>
+                      <p style="font-size: 18px; margin: 10px 0;"><strong>Stands:</strong> ${data.bike_stands}</p>
+                  </div>
+              `;
+          })
+          .catch(error => {
+              console.error('Error filtering data:', error);
+              const resultsContent = document.getElementById('filter-results').querySelector('.results-content');
+              resultsContent.innerHTML = '<p class="error-text">Error getting data, please try again</p>';
+          });
+      }
+      
+      // 显示筛选结果
+      function displayFilterResults(data) {
+          const resultsContainer = document.getElementById('filter-results');
+          const resultsContent = resultsContainer.querySelector('.results-content');
+          
+          // 清空现有内容
+          resultsContent.innerHTML = '';
+          
+          if (data.error) {
+              resultsContent.innerHTML = `<p class="error-text">错误: ${data.error}</p>`;
+              return;
+          }
+          
+          if (!data.results || data.results.length === 0) {
+              resultsContent.innerHTML = '<p>没有找到匹配的数据</p>';
+              return;
+          }
+          
+          // 创建结果表格
+          const table = document.createElement('table');
+          table.className = 'filter-results-table';
+          
+          // 创建表头
+          const thead = document.createElement('thead');
+          const headerRow = document.createElement('tr');
+          
+          // 添加表头列
+          const columns = [
+              { id: 'name', label: '站点名称' },
+              { id: 'available_bikes', label: '可用车辆' },
+              { id: 'available_bike_stands', label: '可用车位' },
+              { id: 'usage_percentage', label: '使用率 (%)' }
+          ];
+          
+          // 如果有预测数据，添加预测列
+          if (data.results[0].hasOwnProperty('predicted_bikes')) {
+              columns.push(
+                  { id: 'predicted_bikes', label: `预测车辆 (${data.results[0].prediction_time})` },
+                  { id: 'predicted_stands', label: `预测车位 (${data.results[0].prediction_time})` }
+              );
+          }
+          
+          columns.forEach(column => {
+              const th = document.createElement('th');
+              th.textContent = column.label;
+              headerRow.appendChild(th);
+          });
+          
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+          
+          // 创建表格内容
+          const tbody = document.createElement('tbody');
+          
+          data.results.forEach(station => {
+              const row = document.createElement('tr');
+              
+              // 为每一列添加单元格
+              columns.forEach(column => {
+                  const cell = document.createElement('td');
+                  
+                  if (column.id === 'usage_percentage') {
+                      // 用进度条显示使用率
+                      const percentage = station[column.id];
+                      cell.innerHTML = `
+                          <div class="progress-bar">
+                              <div class="progress" style="width: ${percentage}%; background-color: ${getColorForPercentage(percentage)}"></div>
+                              <span>${percentage}%</span>
+                  </div>
+              `;
+            } else {
+                      cell.textContent = station[column.id];
+                  }
+                  
+                  row.appendChild(cell);
+              });
+              
+              // 添加点击事件，点击行时在地图上高亮显示该站点
+              row.addEventListener('click', function() {
+                  highlightStationOnMap(station.number);
+              });
+              
+              tbody.appendChild(row);
+          });
+          
+          table.appendChild(tbody);
+          resultsContent.appendChild(table);
+          
+          // 显示结果计数
+          const countInfo = document.createElement('p');
+          countInfo.className = 'results-count';
+          countInfo.textContent = `共显示 ${data.results.length} 个结果`;
+          resultsContent.appendChild(countInfo);
+      }
+      
+      // 根据使用率获取颜色（红色表示使用率高，绿色表示使用率低）
+      function getColorForPercentage(percentage) {
+          // 从绿色渐变到红色
+          const red = Math.floor((percentage / 100) * 255);
+          const green = Math.floor(255 - ((percentage / 100) * 255));
+          return `rgb(${red}, ${green}, 0)`;
+      }
+      
+      // 在地图上高亮显示选中的站点
+      function highlightStationOnMap(stationId) {
+          if (!window.map || !window.stationMarkers) return;
+          
+          // 查找对应的标记
+          const marker = window.stationMarkers.find(m => m.station_id === stationId);
+          
+          if (marker) {
+              // 定位到该站点
+              window.map.setCenter(marker.getPosition());
+              window.map.setZoom(16);
+              
+              // 触发标记点击事件
+              google.maps.event.trigger(marker, 'click');
+          }
+      }
+      
+      // 重置筛选条件
+      function resetFilters() {
+          document.getElementById('station-select').value = '';
+          document.getElementById('time-select').value = '0';
+          
+          // 清空结果区域
+          const resultsContent = document.getElementById('filter-results').querySelector('.results-content');
+          resultsContent.innerHTML = '<p class="placeholder-text">申请筛选后将显示结果...</p>';
+      }
+      
+      // 当页面加载完成后，初始化筛选功能
+      document.addEventListener('DOMContentLoaded', function() {
+          // 初始化筛选模态窗口
+          const filterModal = document.getElementById('filter-modal');
+          if (filterModal) {
+              filterModal.style.display = 'none';
+          }
+          
+          // 添加键盘事件监听器，按ESC键关闭模态窗口
+          document.addEventListener('keydown', function(event) {
+              if (event.key === 'Escape' && filterModal.style.display === 'block') {
+                  toggleFilterModal();
+              }
+          });
       });
     </script>
   </body>
