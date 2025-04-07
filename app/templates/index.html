@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Google Map Example</title>
-
+        <title>Group21-DublinBikes</title>
+    
         <link rel="stylesheet" href="{{ url_for('static', filename='dublin_bikes_app.css') }}">
-        <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
-        async defer></script>
-      
-      </head>
+    
+        <!-- Google Maps API：移除 callback，讓 JS 檔內自己控制 initMap() 呼叫 -->
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}" async defer></script>
+    </head>
 <body>
     <!-- 导航栏 -->
     <div class="navbar">
