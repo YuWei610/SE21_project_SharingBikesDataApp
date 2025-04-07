@@ -2273,66 +2273,138 @@
 // //   }
 // // };
 
-// ✅ 整合所有初始化事件
+// 🌍 MAP INITIALIZATION
+window.initMap = function () {
+  try {
+    const location = { lat: 53.349805, lng: -6.26031 };
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 14,
+      center: location,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      mapTypeControl: false,
+    });
 
+    window.map = map;
+    loadStations(map);
+  } catch (e) {
+    console.error("Error initializing map:", e);
+    initMapWithoutAPI();
+  }
+};
+
+// 🗺️ FALLBACK MAP WITHOUT GOOGLE API
+function initMapWithoutAPI() {
+  console.warn("Using fallback map initialization");
+  const mapElement = document.getElementById("map");
+  mapElement.innerHTML =
+    '<div style="width:100%;height:100%;display:flex;justify-content:center;align-items:center;background-color:#f0f0f0;"><p>Map failed to load. Station list remains available.</p></div>';
+
+  window.map = { getCenter: () => ({ lat: 53.349805, lng: -6.26031 }) };
+  window.google = {
+    maps: {
+      Map: function () {
+        return window.map;
+      },
+      Marker: function () {
+        return {
+          setMap: () => {},
+          getPosition: () => ({ lat: () => 53.349805, lng: () => -6.26031 }),
+        };
+      },
+      InfoWindow: function () {
+        return { open: () => {} };
+      },
+      LatLngBounds: function () {
+        return {
+          extend: () => {},
+          getCenter: () => ({ lat: 53.349805, lng: -6.26031 }),
+        };
+      },
+      SymbolPath: { CIRCLE: 0 },
+      event: { addListener: () => {} },
+    },
+  };
+
+  loadStations(window.map);
+}
+
+// 🚴 STATION MARKERS
+function loadStations(map) {
+  fetch("http://localhost:5000/get_stations")
+    .then((response) => response.json())
+    .then((data) => {
+      window.stationsData = data;
+      displayStations(map, data);
+    })
+    .catch((error) => {
+      console.error("Error loading stations:", error);
+      const mockStations = generateMockStations();
+      window.stationsData = mockStations;
+      displayStations(map, mockStations);
+    });
+}
+
+function displayStations(map, stations) {
+  if (window.stationMarkers) {
+    window.stationMarkers.forEach((marker) => marker.setMap(null));
+  }
+  window.stationMarkers = [];
+
+  stations.forEach((station) => {
+    const lat = parseFloat(
+      station.Position_lat || station.position_lat || station.Latitude || 0
+    );
+    const lng = parseFloat(
+      station.Position_lon || station.position_lon || station.Longitude || 0
+    );
+
+    if (isNaN(lat) || isNaN(lng) || (lat === 0 && lng === 0)) {
+      console.warn("Station missing valid coordinates:", station.Name);
+      return;
+    }
+
+    const marker = new google.maps.Marker({
+      position: { lat, lng },
+      map: map,
+      title: station.Name,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: "#3388ff",
+        fillOpacity: 0.8,
+        strokeWeight: 1,
+        strokeColor: "#ffffff",
+        scale: 8,
+      },
+    });
+
+    window.stationMarkers.push(marker);
+
+    marker.addListener("click", () => {
+      showStationInfoInSidebar(station);
+      handleStationSelection(station);
+    });
+  });
+}
+
+// 🚀 DOM READY BOOTSTRAP
 document.addEventListener("DOMContentLoaded", function () {
-  // 初始化地圖
-  initMap();
+  // ➤ Initialize map with fallback
+  if (typeof google === "undefined" || !google.maps) {
+    console.warn("Google Maps API not loaded, using fallback map mode.");
+    initMapWithoutAPI();
+  } else {
+    console.log("Google Maps API loaded successfully, initializing map.");
+    initMap();
+  }
 
-  // 載入天氣資料
+  // ➤ Load weather info
   fetchWeather();
 
-  // 行程規劃按鈕
-  const journeyPlannerBtn = document.getElementById("journey-planner-btn");
-  if (journeyPlannerBtn) {
-    journeyPlannerBtn.addEventListener("click", showJourneyPlannerPopup);
-  }
+  // ➤ Register UI button handlers
+  bindPlannerButtons();
+  bindMapTypeButtons();
 
-  // 路線規劃按鈕
-  const planJourneyBtn = document.getElementById("plan-journey-btn");
-  if (planJourneyBtn) {
-    planJourneyBtn.addEventListener("click", planJourney);
-  }
-
-  // Submit 按鈕
-  const submitJourneyBtn = document.getElementById("submit-journey");
-  if (submitJourneyBtn) {
-    submitJourneyBtn.addEventListener("click", planJourney);
-  }
-
-  // Directions 按鈕
-  const directionsBtn = document.getElementById("directions-button");
-  if (directionsBtn) {
-    directionsBtn.addEventListener("click", planJourney);
-  }
-
-  // 地圖 / 衛星視圖按鈕
-  const mapViewBtn = document.getElementById("map-view-btn");
-  const satelliteViewBtn = document.getElementById("satellite-view-btn");
-
-  if (mapViewBtn) {
-    mapViewBtn.addEventListener("click", function () {
-      if (window.map && window.map.setMapTypeId) {
-        window.map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
-      }
-    });
-  }
-
-  if (satelliteViewBtn) {
-    satelliteViewBtn.addEventListener("click", function () {
-      if (window.map && window.map.setMapTypeId) {
-        window.map.setMapTypeId(google.maps.MapTypeId.HYBRID);
-      }
-    });
-  }
-
-  // 初始設置地圖類型選擇按鈕樣式
-  if (mapViewBtn && satelliteViewBtn) {
-    mapViewBtn.style.backgroundColor = "#4285f4";
-    satelliteViewBtn.style.backgroundColor = "#333";
-  }
-
-  // 載入所有站點資料填入選單
+  // ➤ Fetch and populate station list
   fetch("http://localhost:5000/get_stations")
     .then((response) => response.json())
     .then((stations) => {
@@ -2344,16 +2416,57 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Error loading stations:", error);
     });
 
-  // 初始化篩選模態視窗
+  // ➤ Filter modal ESC key shortcut
+  initFilterModal();
+});
+
+// 🔘 UI HANDLERS: Journey Planner and Directions
+function bindPlannerButtons() {
+  const plannerConfig = [
+    { id: "journey-planner-btn", handler: showJourneyPlannerPopup },
+    { id: "plan-journey-btn", handler: planJourney },
+    { id: "submit-journey", handler: planJourney },
+    { id: "directions-button", handler: planJourney },
+  ];
+  plannerConfig.forEach(({ id, handler }) => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener("click", handler);
+  });
+}
+
+// 🗺️ UI HANDLERS: Map Type Toggle
+function bindMapTypeButtons() {
+  const mapViewBtn = document.getElementById("map-view-btn");
+  const satelliteViewBtn = document.getElementById("satellite-view-btn");
+
+  if (mapViewBtn && satelliteViewBtn) {
+    mapViewBtn.addEventListener("click", () => {
+      if (window.map?.setMapTypeId) {
+        window.map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+        mapViewBtn.style.backgroundColor = "#4285f4";
+        satelliteViewBtn.style.backgroundColor = "#333";
+      }
+    });
+
+    satelliteViewBtn.addEventListener("click", () => {
+      if (window.map?.setMapTypeId) {
+        window.map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+        satelliteViewBtn.style.backgroundColor = "#4285f4";
+        mapViewBtn.style.backgroundColor = "#333";
+      }
+    });
+  }
+}
+
+// 🧰 MODAL MANAGEMENT: Filter Modal Setup
+function initFilterModal() {
   const filterModal = document.getElementById("filter-modal");
   if (filterModal) {
     filterModal.style.display = "none";
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && filterModal.style.display === "block") {
+        toggleFilterModal();
+      }
+    });
   }
-
-  // 鍵盤 ESC 關閉篩選模態視窗
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && filterModal.style.display === "block") {
-      toggleFilterModal();
-    }
-  });
-});
+}
