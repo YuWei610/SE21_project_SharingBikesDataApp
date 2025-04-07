@@ -1,22 +1,23 @@
 import os
 from dotenv import load_dotenv
+import sys
+sys.path.append('..')  # 添加父目录到搜索路径
+import dbinfo
 
 # Load environment variables from the .env file
-load_dotenv()  # It looks for a .env file in the current directory
+# load_dotenv()  # It looks for a .env file in the current directory
 
-# Retrieve specific values from environment variables
-WEATHER_API_KEY = os.getenv("w_appid")      # Weather API key
-BIKE_API_KEY = os.getenv("b_apiKey")        # JCDecaux Bike API key
-CONTRACT = os.getenv("contract")            # City contract name, e.g., "dublin"
-
-
+# 使用dbinfo中的API密钥
+BIKE_API_KEY = dbinfo.JCKEY
+CONTRACT = dbinfo.NAME
+WEATHER_API_KEY = "597b17711b1b951ff3254b78f58df59d"  # 使用dublin_bikes_app.js中的OpenWeatherMap API密钥
 
 API_CONFIG = {
     "weather": {
         "weather_url": "https://api.openweathermap.org/data/3.0/onecall",
         "params": {
-            "lat": 33.44,
-            "lon": -94.04,
+            "lat": 53.349805,
+            "lon": -6.260310,
             "appid": WEATHER_API_KEY
         }
     },
