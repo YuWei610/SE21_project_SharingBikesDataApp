@@ -116,8 +116,8 @@ function displayStations(map, stations) {
   // 遍历站点数据创建标记
   stations.forEach((station) => {
     // 有些测试站点可能没有坐标，需要处理
-    const lat = parseFloat(station.Latitude || station.latitude || 0);
-    const lng = parseFloat(station.Longitude || station.longitude || 0);
+    const lat = parseFloat(station.Position_lat || station.position_lat || 0);
+    const lng = parseFloat(station.Position_lon || station.Position_lon || 0);
 
     if (isNaN(lat) || isNaN(lng) || (lat === 0 && lng === 0)) {
       console.warn("站点没有有效的坐标:", station.Name || station.name);
