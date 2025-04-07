@@ -7,13 +7,13 @@ import dbinfo
 from datetime import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
-from app.call_api_function.call_api_stations import call_api_single_stations
-from app.call_api_function.call_api_weather_by_latlon import call_api_weather
+from call_api_function.call_api_single_stations import call_api_single_stations
+from call_api_function.call_api_weather_by_latlon import call_api_weather
 
 import joblib
 # Load models once
-bike_model = joblib.load("app/ML_function/bike_availability_model.pkl")
-stand_model = joblib.load("app/ML_function/bike_stand_availability_model.pkl")
+bike_model = joblib.load("ML_function/bike_availability_model.pkl")
+stand_model = joblib.load("ML_function/bike_stand_availability_model.pkl")
 
 # load_dotenv()
 
@@ -155,12 +155,8 @@ def predict_availability():
         day_of_week = now.weekday() + 1  # Monday = 1
 
         selected_hour = int(data['hour'])
-        if selected_hour < current_hour:
-            return jsonify({
-                "bikes": "Please select a future time.",
-                "bike_stands": "Please select a future time."
-            })
-
+        # 移除时间检查逻辑，允许所有时间进行预测
+        
         # 2. Get latitude and longitude
         station_info = call_api_single_stations(station_id)
         lat = station_info.get("position", {}).get("latitude")
@@ -200,7 +196,180 @@ def predict_availability():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# 新增API端点：获取所有站点信息（用于填充下拉菜单）
+@app.route('/get_all_stations', methods=['GET'])
+def get_all_stations():
+    try:
+        mycursor = mydb.cursor(dictionary=True)
+        mycursor.execute("SELECT number, name, address FROM station ORDER BY name")
+        stations = mycursor.fetchall()
+        return jsonify({"stations": stations})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
+# 新增API端点：根据站点和时间筛选数据
+@app.route('/filter_data', methods=['POST'])
+def filter_data():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Invalid or missing JSON"}), 400
+        
+        station_id = data.get('station_id')
+        hour = data.get('hour')
+        
+        # 准备查询条件
+        query_conditions = []
+        params = []
+        
+        # 1. 如果选择了特定站点
+        if station_id and station_id != "":
+            query_conditions.append("s.number = %s")
+            params.append(int(station_id))
+        
+        # 2. 构建基本查询
+        query = """
+            SELECT s.number, s.name, s.address, 
+                   a.available_bikes, a.available_bike_stands, s.bike_stands,
+                   ROUND(a.available_bikes / s.bike_stands * 100) as bike_percentage,
+                   ROUND(a.available_bike_stands / s.bike_stands * 100) as stand_percentage,
+                   a.status, DATE_FORMAT(a.last_update, '%Y-%m-%d %H:%i:%s') as last_update
+            FROM station s
+            JOIN availability a ON s.number = a.number
+        """
+        
+        # 3. 添加查询条件
+        if query_conditions:
+            query += " WHERE " + " AND ".join(query_conditions)
+        
+        # 4. 添加排序
+        query += " ORDER BY s.name"
+        
+        # 5. 执行查询
+        mycursor = mydb.cursor(dictionary=True)
+        mycursor.execute(query, params)
+        results = mycursor.fetchall()
+        
+        # 6. 如果指定了时间，使用ML模型进行预测
+        if hour is not None and (not station_id or station_id == ""):
+            # 为所有站点预测指定时间点的可用情况
+            now = datetime.now()
+            current_hour = now.hour
+            day_of_week = now.weekday() + 1  # Monday = 1
+            selected_hour = int(hour)
+            
+            # 只有当选择的时间在未来时才预测
+            if selected_hour > current_hour:
+                # 获取所有站点及其位置
+                stations_query = "SELECT number, position_lat, position_lon FROM station"
+                mycursor.execute(stations_query)
+                stations = mycursor.fetchall()
+                
+                # 预测结果列表
+                prediction_results = []
+                
+                # 获取天气数据（使用都柏林中心位置）
+                weather_response = call_api_weather(53.349805, -6.260310)
+                index = selected_hour - current_hour
+                hourly = weather_response.get("hourly", [])
+                
+                if index < len(hourly):
+                    weather_hour = hourly[index]
+                    temperature_c = round(weather_hour.get("temp", 273.15) - 273.15, 2)
+                    wind_speed = weather_hour.get("wind_speed", 0.0)
+                    precipitation = 1 if weather_hour.get("weather", [{}])[0].get("main", "") == "Rain" else 0
+                    
+                    # 为每个站点进行预测
+                    for station in stations:
+                        input_df = pd.DataFrame([{
+                            "station_id": station["number"],
+                            "temperature": temperature_c,
+                            "precipitation": precipitation,
+                            "wind_speed": wind_speed,
+                            "hour": selected_hour,
+                            "day_of_week": day_of_week
+                        }])
+                        
+                        predicted_bikes = int(round(bike_model.predict(input_df)[0]))
+                        predicted_stands = int(round(stand_model.predict(input_df)[0]))
+                        
+                        # 找到对应站点的结果
+                        for result in results:
+                            if result["number"] == station["number"]:
+                                result["predicted_bikes"] = predicted_bikes
+                                result["predicted_stands"] = predicted_stands
+                                result["prediction_time"] = f"{selected_hour}:00"
+                                break
+        
+        # 7. 如果指定了站点和时间，只预测该站点
+        elif hour is not None and station_id and station_id != "":
+            now = datetime.now()
+            current_hour = now.hour
+            day_of_week = now.weekday() + 1
+            selected_hour = int(hour)
+            
+            if selected_hour > current_hour:
+                station_info = None
+                for result in results:
+                    if result["number"] == int(station_id):
+                        station_info = result
+                        break
+                        
+                if station_info:
+                    # 获取站点位置
+                    station_query = "SELECT position_lat, position_lon FROM station WHERE number = %s"
+                    mycursor.execute(station_query, (int(station_id),))
+                    station_location = mycursor.fetchone()
+                    
+                    if station_location:
+                        # 获取天气数据
+                        weather_response = call_api_weather(
+                            station_location["position_lat"], 
+                            station_location["position_lon"]
+                        )
+                        index = selected_hour - current_hour
+                        hourly = weather_response.get("hourly", [])
+                        
+                        if index < len(hourly):
+                            weather_hour = hourly[index]
+                            temperature_c = round(weather_hour.get("temp", 273.15) - 273.15, 2)
+                            wind_speed = weather_hour.get("wind_speed", 0.0)
+                            precipitation = 1 if weather_hour.get("weather", [{}])[0].get("main", "") == "Rain" else 0
+                            
+                            input_df = pd.DataFrame([{
+                                "station_id": int(station_id),
+                                "temperature": temperature_c,
+                                "precipitation": precipitation,
+                                "wind_speed": wind_speed,
+                                "hour": selected_hour,
+                                "day_of_week": day_of_week
+                            }])
+                            
+                            predicted_bikes = int(round(bike_model.predict(input_df)[0]))
+                            predicted_stands = int(round(stand_model.predict(input_df)[0]))
+                            
+                            station_info["predicted_bikes"] = predicted_bikes
+                            station_info["predicted_stands"] = predicted_stands
+                            station_info["prediction_time"] = f"{selected_hour}:00"
+        
+        # 8. 处理结果数据
+        for result in results:
+            total_stands = result.get("bike_stands", 0)
+            if total_stands > 0:
+                result["usage_percentage"] = round((result.get("available_bikes", 0) / total_stands) * 100)
+            else:
+                result["usage_percentage"] = 0
+        
+        return jsonify({
+            "results": results,
+            "count": len(results),
+            "selected_hour": hour,
+            "selected_station": station_id
+        })
+        
+    except Exception as e:
+        print(f"Error in filter_data: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/')
 def index():
