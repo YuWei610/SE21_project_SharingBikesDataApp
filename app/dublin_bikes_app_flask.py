@@ -7,6 +7,13 @@ import dbinfo
 from datetime import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
+from app.call_api_function.call_api_stations import call_api_single_stations
+from app.call_api_function.call_api_weather_by_latlon import call_api_weather
+
+import joblib
+# Load models once
+bike_model = joblib.load("app/ML_function/bike_availability_model.pkl")
+stand_model = joblib.load("app/ML_function/bike_stand_availability_model.pkl")
 
 # load_dotenv()
 
@@ -131,6 +138,69 @@ def get_barchart(station_id):
         return jsonify({'img_path': img_path})
     else:
         return jsonify({'error': 'No data available for this station.'}), 404
+
+
+# Get the bikes and bike_stands prediction
+@app.route('/predict_availability', methods=['POST'])
+def predict_availability():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Invalid or missing JSON"}), 400
+        
+        station_id = int(data['station_id'])
+        # 1. Get current date info
+        now = datetime.now()
+        current_hour = now.hour
+        day_of_week = now.weekday() + 1  # Monday = 1
+
+        selected_hour = int(data['hour'])
+        if selected_hour < current_hour:
+            return jsonify({
+                "bikes": "Please select a future time.",
+                "bike_stands": "Please select a future time."
+            })
+
+        # 2. Get latitude and longitude
+        station_info = call_api_single_stations(station_id)
+        lat = station_info.get("position", {}).get("latitude")
+        lon = station_info.get("position", {}).get("longitude")
+        if lat is None or lon is None:
+            return jsonify({"error": "Invalid station info"}), 400
+        
+        # 3. Get weather information
+        weather_response = call_api_weather(lat, lon)
+        index = selected_hour - current_hour
+
+        hourly = weather_response.get("hourly", [])
+        weather_hour = hourly[index]
+        temperature_c = round(weather_hour.get("temp", 273.15) - 273.15, 2)
+        wind_speed = weather_hour.get("wind_speed", 0.0)
+        precipitation = 1 if weather_hour.get("weather", [{}])[0].get("main", "") == "Rain" else 0
+
+        # Step 3: Format input
+        input_df = pd.DataFrame([{
+            "station_id": station_id,
+            "temperature": temperature_c,
+            "precipitation": precipitation,
+            "wind_speed": wind_speed,
+            "hour": selected_hour,
+            "day_of_week": day_of_week
+        }])
+
+        # 4. Run prediction
+        predicted_bikes = int(round(bike_model.predict(input_df)[0]))
+        predicted_stands = int(round(stand_model.predict(input_df)[0]))
+
+        return jsonify({
+            "bikes": predicted_bikes,
+            "bike_stands": predicted_stands
+        })
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 @app.route('/')
 def index():
