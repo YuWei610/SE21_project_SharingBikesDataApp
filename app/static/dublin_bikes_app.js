@@ -2328,6 +2328,27 @@ function initMapWithoutAPI() {
   loadStations(window.map);
 }
 
+// 🔄 FETCH WEATHER
+function fetchWeather() {
+  const weatherApiKey = "1e5d3d18989bed9a0ed5f59d50a821ac";
+  const city = "Dublin";
+  const weatherElement = document.getElementById("weather");
+
+  fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weatherApiKey}&units=metric`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      const weather = data.weather[0].description;
+      const temp = data.main.temp;
+      weatherElement.textContent = `${city}: ${temp}°C, ${weather}`;
+    })
+    .catch((error) => {
+      console.error("Error fetching weather data:", error);
+      weatherElement.textContent = "Failed to load weather data";
+    });
+}
+
 // 🚴 STATION MARKERS
 function loadStations(map) {
   fetch("http://localhost:5000/get_stations")
@@ -2342,6 +2363,26 @@ function loadStations(map) {
       window.stationsData = mockStations;
       displayStations(map, mockStations);
     });
+}
+
+function generateMockStations() {
+  const center = { lat: 53.349805, lng: -6.26031 };
+  const mock = [];
+  for (let i = 1; i <= 20; i++) {
+    const lat = center.lat + (Math.random() - 0.5) * 0.02;
+    const lng = center.lng + (Math.random() - 0.5) * 0.03;
+    mock.push({
+      Number: i,
+      Name: `Mock Station ${i}`,
+      Address: `Mock address ${i}`,
+      Latitude: lat,
+      Longitude: lng,
+      Bike_stands: Math.floor(Math.random() * 20) + 10,
+      Available_bikes: Math.floor(Math.random() * 10) + 1,
+      Available_bike_stands: Math.floor(Math.random() * 10) + 1,
+    });
+  }
+  return mock;
 }
 
 function displayStations(map, stations) {
@@ -2377,6 +2418,7 @@ function displayStations(map, stations) {
       },
     });
 
+    marker.station_id = station.Number;
     window.stationMarkers.push(marker);
 
     marker.addListener("click", () => {
@@ -2386,9 +2428,36 @@ function displayStations(map, stations) {
   });
 }
 
+// 📍 STATION INTERACTION
+function handleStationSelection(station) {
+  const startInput = document.getElementById("start-location");
+  const endInput = document.getElementById("end-location");
+  if (!startInput.value) {
+    startInput.value = station.Name;
+  } else if (!endInput.value) {
+    endInput.value = station.Name;
+  } else {
+    startInput.value = station.Name;
+    endInput.value = "";
+  }
+}
+
+function showStationInfoInSidebar(station) {
+  console.log("Selected station:", station);
+  const popup = document.getElementById("station-popup");
+  popup.style.display = "block";
+  document.getElementById("station-popup-title").textContent = station.Name;
+  const content = document.getElementById("station-popup-content");
+  content.innerHTML = `
+      <p><strong>Address:</strong> ${station.Address}</p>
+      <p><strong>Available Bikes:</strong> ${station.Available_bikes}</p>
+      <p><strong>Available Stands:</strong> ${station.Available_bike_stands}</p>
+      <p><strong>Total Capacity:</strong> ${station.Bike_stands}</p>
+    `;
+}
+
 // 🚀 DOM READY BOOTSTRAP
 document.addEventListener("DOMContentLoaded", function () {
-  // ➤ Initialize map with fallback
   if (typeof google === "undefined" || !google.maps) {
     console.warn("Google Maps API not loaded, using fallback map mode.");
     initMapWithoutAPI();
@@ -2397,14 +2466,10 @@ document.addEventListener("DOMContentLoaded", function () {
     initMap();
   }
 
-  // ➤ Load weather info
   fetchWeather();
-
-  // ➤ Register UI button handlers
   bindPlannerButtons();
   bindMapTypeButtons();
 
-  // ➤ Fetch and populate station list
   fetch("http://localhost:5000/get_stations")
     .then((response) => response.json())
     .then((stations) => {
@@ -2416,7 +2481,6 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Error loading stations:", error);
     });
 
-  // ➤ Filter modal ESC key shortcut
   initFilterModal();
 });
 
