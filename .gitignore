@@ -1,0 +1,22 @@
+# Python-related
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+.env
+venv/
+.env.*
+
+# Jupyter & logs
+.ipynb_checkpoints/
+*.log
+
+# Machine Learning files
+*.csv
+*.pkl
+
+# VSCode / PyCharm
+.vscode/
+.idea/
