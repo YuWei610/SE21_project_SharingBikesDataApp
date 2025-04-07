@@ -178,7 +178,7 @@ def predict_availability():
         wind_speed = weather_hour.get("wind_speed", 0.0)
         precipitation = 1 if weather_hour.get("weather", [{}])[0].get("main", "") == "Rain" else 0
 
-        # Step 3: Format input
+        # 4. Format input
         input_df = pd.DataFrame([{
             "station_id": station_id,
             "temperature": temperature_c,
@@ -188,7 +188,7 @@ def predict_availability():
             "day_of_week": day_of_week
         }])
 
-        # 4. Run prediction
+        # 5. Run prediction
         predicted_bikes = int(round(bike_model.predict(input_df)[0]))
         predicted_stands = int(round(stand_model.predict(input_df)[0]))
 
