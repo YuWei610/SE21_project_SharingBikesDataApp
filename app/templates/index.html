@@ -4,6 +4,8 @@
         <title>Google Map Example</title>
 
         <link rel="stylesheet" href="{{ url_for('static', filename='dublin_bikes_app.css') }}">
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
+        async defer></script>
       
       </head>
 <body>
