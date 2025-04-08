@@ -198,17 +198,36 @@ function fetchDynamicStationData(stationNumber) {
     });
 }
 
-// // 🚀 DOM Ready: Initialize map
+// 🌤️ Fetch and display weather summary
+function loadWeatherSummary() {
+  fetch("http://localhost:5000/get_weather_summary")
+    .then((res) => res.json())
+    .then((data) => {
+      const weatherDiv = document.getElementById("weather");
+      if (data.summary) {
+        weatherDiv.textContent = data.summary;
+      } else {
+        weatherDiv.textContent = "Weather unavailable";
+      }
+    })
+    .catch((err) => {
+      console.error("Failed to fetch weather:", err);
+      document.getElementById("weather").textContent = "Weather error";
+    });
+}
 
-// document.addEventListener("DOMContentLoaded", function () {
-//   if (typeof google !== "undefined" && google.maps && google.maps.Map) {
-//     console.log("✅ Google Maps API loaded, initializing map.");
-//     initMap();
-//   } else {
-//     console.warn("⚠️ Google Maps API failed to load, using fallback.");
-//     initMapWithoutAPI();
-//   }
-// });
+document.addEventListener("DOMContentLoaded", function () {
+  if (typeof google !== "undefined" && google.maps && google.maps.Map) {
+    console.log("✅ Google Maps API loaded, initializing map.");
+    initMap();
+  } else {
+    console.warn("⚠️ Google Maps API failed to load, using fallback.");
+    initMapWithoutAPI();
+  }
+
+  // 🌤️ Call weather summary on DOM ready
+  loadWeatherSummary();
+});
 
 // 🪝 Stub for undefined planner popup close function
 function closeJourneyPlannerPopup() {
