@@ -119,6 +119,29 @@ function displayStations(map, stations) {
   }
 }
 
+// 🆕 Fetch live station info and show popup
+function fetchDynamicStationData(stationNumber) {
+  fetch(`http://localhost:5000/dynamic/${stationNumber}`)
+    .then((res) => res.json())
+    .then((data) => {
+      const popup = document.getElementById("station-popup");
+      popup.style.display = "block";
+
+      const content = document.getElementById("station-popup-content");
+      content.innerHTML = `
+          <p><strong>Available Bikes:</strong> ${data.available_bikes}</p>
+          <p><strong>Available Stands:</strong> ${data.available_bike_stands}</p>
+          <p><strong>Mechanical Bikes:</strong> ${data.mechanical_bikes}</p>
+          <p><strong>Electric Bikes:</strong> ${data.electrical_bikes}</p>
+          <p><strong>Status:</strong> ${data.status}</p>
+          <p><strong>Last Update:</strong> ${data.last_update}</p>
+        `;
+    })
+    .catch((err) => {
+      console.error("Failed to load station info:", err);
+    });
+}
+
 // 🚀 DOM Ready: Initialize map
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -130,3 +153,18 @@ document.addEventListener("DOMContentLoaded", function () {
     initMapWithoutAPI();
   }
 });
+
+// 🪝 Stub for undefined planner popup close function
+function closeJourneyPlannerPopup() {
+  console.log(
+    "closeJourneyPlannerPopup called (stub). Optional: hide planner if needed."
+  );
+}
+
+function handleStationSelection(station) {
+  console.log("Station selected:", station);
+}
+
+function showStationInfoInSidebar(station) {
+  console.log("Sidebar info (can be expanded):", station);
+}
