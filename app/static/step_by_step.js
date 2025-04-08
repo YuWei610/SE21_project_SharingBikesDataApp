@@ -142,17 +142,17 @@ function fetchDynamicStationData(stationNumber) {
     });
 }
 
-// 🚀 DOM Ready: Initialize map
+// // 🚀 DOM Ready: Initialize map
 
-document.addEventListener("DOMContentLoaded", function () {
-  if (typeof google !== "undefined" && google.maps && google.maps.Map) {
-    console.log("✅ Google Maps API loaded, initializing map.");
-    initMap();
-  } else {
-    console.warn("⚠️ Google Maps API failed to load, using fallback.");
-    initMapWithoutAPI();
-  }
-});
+// document.addEventListener("DOMContentLoaded", function () {
+//   if (typeof google !== "undefined" && google.maps && google.maps.Map) {
+//     console.log("✅ Google Maps API loaded, initializing map.");
+//     initMap();
+//   } else {
+//     console.warn("⚠️ Google Maps API failed to load, using fallback.");
+//     initMapWithoutAPI();
+//   }
+// });
 
 // 🪝 Stub for undefined planner popup close function
 function closeJourneyPlannerPopup() {
