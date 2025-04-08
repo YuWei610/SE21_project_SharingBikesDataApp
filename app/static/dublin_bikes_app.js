@@ -131,7 +131,7 @@ function displayStations(map, stations) {
         lng: lng,
       },
       map: map,
-      title: station.name,
+      title: station.Name,
       icon: {
         path: google.maps.SymbolPath.CIRCLE,
         fillColor: "#3388ff",
@@ -166,18 +166,18 @@ function displayStations(map, stations) {
 function handleStationSelection(station) {
   // 如果没有起点，设为起点
   if (!document.getElementById("start-location").value) {
-    document.getElementById("start-location").value = station.name;
+    document.getElementById("start-location").value = station.Name;
   }
   // 否则如果没有终点，设为终点
   else if (!document.getElementById("end-location").value) {
-    document.getElementById("end-location").value = station.name;
+    document.getElementById("end-location").value = station.Name;
 
     // 如果起点和终点都设置了，可以自动规划路线
     // planJourney(); // 去掉自动规划，让用户点击按钮规划
   }
   // 如果起点和终点都已设置，重新设置起点
   else {
-    document.getElementById("start-location").value = station.name;
+    document.getElementById("start-location").value = station.Name;
     document.getElementById("end-location").value = ""; // 清除终点
   }
 }
@@ -228,7 +228,7 @@ function showStationInfoInSidebar(station) {
   `;
 
   // 生成并显示站点图表
-  generateStationCharts(station.number || 1);
+  generateStationCharts(station.Number || 1);
 
   // 设置按钮点击事件
   const startBtn = document.getElementById("set-as-start-btn");
@@ -2263,12 +2263,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// // 頁面載入後自動初始化地圖
-// window.onload = function () {
-//   if (typeof google === "undefined") {
-//     console.log("Google Maps API 不可用，使用备用地图显示");
-//     initMapWithoutAPI();
-//   } else {
-//     initMap();
-//   }
-// };
+// 頁面載入後自動初始化地圖
+window.onload = function () {
+  if (typeof google === "undefined") {
+    console.log("Google Maps API 不可用，使用备用地图显示");
+    initMapWithoutAPI();
+  } else {
+    initMap();
+  }
+};
