@@ -70,7 +70,8 @@ function loadStations(map) {
     .then((data) => {
       // 保存站点数据到全局，以便路线规划使用
       window.stationsData = data;
-
+      console.log("++++++++++++++++++++++++++");
+      console.log(data);
       // 在地图上显示站点
       displayStations(map, data);
     })
