@@ -123,15 +123,18 @@ function displayStations(map, stations) {
             .then((res) => res.json())
             .then((data) => {
               const content = `
-                  <div style="background: rgba(173, 216, 230, 0.3); padding: 10px; border-radius: 6px; font-size: 13px;">
-                    <p><strong>${station.number} - ${station.name}</strong></p>
-                    <p><strong>Address:</strong> ${station.address}</p>
-                    <p>&gt; Available Bikes: ${data.available_bikes}</p>
-                    <p>&gt; Available Bike Stands: ${data.available_bike_stands}</p>
-                    <p>&gt; Mechanical Bikes: ${data.mechanical_bikes}</p>
-                    <p>&gt; Electrical Bikes: ${data.electrical_bikes}</p>
-                    <p>&gt; Status: ${data.status}</p>
-                    <p>&gt; Last Update: ${data.last_update}</p>
+                  <div style="background: rgba(173, 216, 230, 0.5); padding: 12px; border-radius: 10px; font-size: 14px; font-family: 'Segoe UI', sans-serif; color: #333;">
+                    <div style="font-weight: bold; font-size: 16px; margin-bottom: 6px;">${station.number} - ${station.name}</div>
+                    <div><strong>Address:</strong> ${station.address}</div>
+                    <div style="margin-top: 6px;">
+                      &rsaquo; <strong>Available Bikes:</strong> ${data.available_bikes} <br>
+                      &rsaquo; <strong>Available Bike Stands:</strong> ${data.available_bike_stands} <br>
+                      &rsaquo; <strong>Mechanical Bikes:</strong> ${data.mechanical_bikes} <br>
+                      &rsaquo; <strong>Electrical Bikes:</strong> ${data.electrical_bikes} <br>
+                      &rsaquo; <strong>Status:</strong> ${data.status} <br>
+                      &rsaquo; <strong>Last Update:</strong> <br>
+                      ${data.last_update}
+                    </div>
                   </div>
                 `;
               hoverCache.set(station.number, content);
@@ -142,7 +145,7 @@ function displayStations(map, stations) {
               console.error("Failed to load hover info:", err);
             });
         }
-      }, 300); // debounce hover
+      }, 300);
     });
 
     marker.addListener("mouseout", () => {
