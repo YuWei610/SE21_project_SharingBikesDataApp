@@ -25,6 +25,11 @@ def call_api_weather(lat, lon):
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         }
+        print("+++++++++++:", api_config.API_CONFIG["weather"]["weather_url"])
+        print("++++++key:",api_config.API_CONFIG["weather"]["params"]["appid"])
+        print("lat:", lat)
+        print("lon:", lon)
+
         r = requests.get(api_config.API_CONFIG["weather"]["weather_url"], params={"appid": api_config.API_CONFIG["weather"]["params"]["appid"], "lat": lat, "lon": lon}, headers=headers)
         print(r.status_code)
         print(r.text)
