@@ -257,6 +257,9 @@ def get_weather_summary():
         weather_data = call_api_weather(lat, lon)
         current_weather = weather_data.get("current", {})
 
+        print("weather_data :" , weather_data )
+        print("current_weather :" ,  current_weather)
+
         # Convert temperature from Kelvin to Celsius
         temp_celsius = round(current_weather.get("temp", 273.15) - 273.15, 2)
 
@@ -265,6 +268,8 @@ def get_weather_summary():
 
         # Format summary string
         summary = f"Dublin: {temp_celsius}°C, {description}"
+
+        print("summary : ",summary)
 
         # Return summary to frontend
         return jsonify({"summary": summary})
