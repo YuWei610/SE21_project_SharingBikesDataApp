@@ -116,12 +116,8 @@ function displayStations(map, stations) {
   // Iterate through each station and place a marker
   stations.forEach((station) => {
     // Parse latitude and longitude (from different key cases)
-    const lat = parseFloat(
-      station.Position_lat || station.position_lat || station.latitude || 0
-    );
-    const lng = parseFloat(
-      station.Position_lon || station.position_lon || station.longitude || 0
-    );
+    const lat = parseFloat(station.position_lat || station.Latitude || 0);
+    const lng = parseFloat(station.position_lon || station.Longitude || 0);
 
     // Skip stations with invalid coordinates
     if (isNaN(lat) || isNaN(lng) || (lat === 0 && lng === 0)) {
@@ -161,3 +157,14 @@ function displayStations(map, stations) {
   // Add all markers to the map
   window.stationMarkers.forEach((marker) => marker.setMap(map));
 }
+
+// 🚀 When page is ready, initialize the map (with fallback)
+document.addEventListener("DOMContentLoaded", function () {
+  if (typeof google === "undefined" || !google.maps) {
+    console.warn("Google Maps API failed to load, using fallback map.");
+    initMapWithoutAPI();
+  } else {
+    console.log("Google Maps API loaded, initializing map.");
+    initMap();
+  }
+});
