@@ -132,7 +132,7 @@ function displayStations(map, stations) {
         lng: lng,
       },
       map: map,
-      title: station.Name,
+      title: station.name,
       icon: {
         path: google.maps.SymbolPath.CIRCLE,
         fillColor: "#3388ff",
