@@ -67,9 +67,9 @@ def get_stations():
 # to date dynamic info.
 @app.route('/dynamic/<int:station_Number>')
 def dynamic_details (station_Number):  
-    api_key = os.getenv("b_apiKey"),
-    contract = os.getenv("contract"),
-    r = requests.get(f"https://api.jcdecaux.com/vls/v3/stations/{station_Number}?contract={contract}&apiKey={api_key}")
+    api_key = os.getenv("b_apiKey")
+    contract = os.getenv("contract")
+    r = requests.get(f"https://api.jcdecaux.com/vls/v1/stations/{station_Number}?contract={contract}&apiKey={api_key}")
 
     if r.status_code != 200:
             return jsonify({'error': 'Failed to retrieve data from API'}), r.status_code

@@ -123,20 +123,35 @@ function displayStations(map, stations) {
             .then((res) => res.json())
             .then((data) => {
               const content = `
-                  <div style="background: rgba(173, 216, 230, 0.5); padding: 12px; border-radius: 10px; font-size: 14px; font-family: 'Segoe UI', sans-serif; color: #333;">
-                    <div style="font-weight: bold; font-size: 16px; margin-bottom: 6px;">${station.number} - ${station.name}</div>
-                    <div><strong>Address:</strong> ${station.address}</div>
-                    <div style="margin-top: 6px;">
-                      &rsaquo; <strong>Available Bikes:</strong> ${data.available_bikes} <br>
-                      &rsaquo; <strong>Available Bike Stands:</strong> ${data.available_bike_stands} <br>
-                      &rsaquo; <strong>Mechanical Bikes:</strong> ${data.mechanical_bikes} <br>
-                      &rsaquo; <strong>Electrical Bikes:</strong> ${data.electrical_bikes} <br>
-                      &rsaquo; <strong>Status:</strong> ${data.status} <br>
-                      &rsaquo; <strong>Last Update:</strong> <br>
-                      ${data.last_update}
-                    </div>
+                <div style="background: rgba(173, 216, 230, 0.5); padding: 14px 18px; border-radius: 12px; font-size: 15px; font-family: 'Segoe UI', sans-serif; color: #333; max-width: 280px;">
+                  <div style="font-weight: bold; font-size: 17px; margin-bottom: 8px;">
+                    ${station.number} - ${station.name}
                   </div>
-                `;
+                  <div style="margin-bottom: 8px;">
+                    <strong>Address:</strong> ${station.address}
+                  </div>
+                  <div style="line-height: 1.6;">
+                    <div>&rsaquo; <strong>Available Bikes:</strong> ${
+                      data.available_bikes ?? "N/A"
+                    }</div>
+                    <div>&rsaquo; <strong>Available Bike Stands:</strong> ${
+                      data.available_bike_stands ?? "N/A"
+                    }</div>
+                    <div>&rsaquo; <strong>Mechanical Bikes:</strong> ${
+                      data.mechanical_bikes ?? "N/A"
+                    }</div>
+                    <div>&rsaquo; <strong>Electrical Bikes:</strong> ${
+                      data.electrical_bikes ?? "N/A"
+                    }</div>
+                    <div>&rsaquo; <strong>Status:</strong> ${
+                      data.status ?? "N/A"
+                    }</div>
+                    <div>&rsaquo; <strong>Last Update:</strong> ${
+                      data.last_update ?? "N/A"
+                    }</div>
+                  </div>
+                </div>
+              `;
               hoverCache.set(station.number, content);
               infoWindow.setContent(content);
               infoWindow.open(map, marker);
