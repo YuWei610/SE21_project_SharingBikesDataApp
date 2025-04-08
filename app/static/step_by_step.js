@@ -108,6 +108,44 @@ function displayStations(map, stations) {
       showStationInfoInSidebar(station);
       handleStationSelection(station);
     });
+
+    marker.addListener("mouseover", () => {
+      clearTimeout(hoverTimeout);
+      hoverTimeout = setTimeout(() => {
+        if (hoverCache.has(station.number)) {
+          infoWindow.setContent(hoverCache.get(station.number));
+          infoWindow.open(map, marker);
+        } else {
+          fetch(`http://localhost:5000/dynamic/${station.number}`)
+            .then((res) => res.json())
+            .then((data) => {
+              const content = `
+                  <div style="background: rgba(173, 216, 230, 0.3); padding: 10px; border-radius: 6px; font-size: 13px;">
+                    <p><strong>${station.number} - ${station.name}</strong></p>
+                    <p><strong>Address:</strong> ${station.address}</p>
+                    <p>&gt; Available Bikes: ${data.available_bikes}</p>
+                    <p>&gt; Available Bike Stands: ${data.available_bike_stands}</p>
+                    <p>&gt; Mechanical Bikes: ${data.mechanical_bikes}</p>
+                    <p>&gt; Electrical Bikes: ${data.electrical_bikes}</p>
+                    <p>&gt; Status: ${data.status}</p>
+                    <p>&gt; Last Update: ${data.last_update}</p>
+                  </div>
+                `;
+              hoverCache.set(station.number, content);
+              infoWindow.setContent(content);
+              infoWindow.open(map, marker);
+            })
+            .catch((err) => {
+              console.error("Failed to load hover info:", err);
+            });
+        }
+      }, 300); // debounce hover
+    });
+
+    marker.addListener("mouseout", () => {
+      clearTimeout(hoverTimeout);
+      infoWindow.close();
+    });
   });
 
   if (
