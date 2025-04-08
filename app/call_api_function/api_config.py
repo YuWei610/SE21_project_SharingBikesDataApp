@@ -4,6 +4,8 @@ import sys
 sys.path.append('..')  # 添加父目录到搜索路径
 import dbinfo
 
+load_dotenv()
+
 # Load environment variables from the .env file
 # load_dotenv()  # It looks for a .env file in the current directory
 
@@ -22,7 +24,7 @@ API_CONFIG = {
         "params": {
             "lat": 53.349805,
             "lon": -6.260310,
-            "appid": WEATHER_API_KEY
+            "appid": WEATHER_API_KEY 
         }
     },
     "stations": {
