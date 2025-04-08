@@ -70,6 +70,9 @@ function displayStations(map, stations) {
     window.stationMarkers.forEach((marker) => marker.setMap(null));
   }
   window.stationMarkers = [];
+  const infoWindow = new google.maps.InfoWindow();
+  const hoverCache = new Map();
+  let hoverTimeout;
 
   stations.forEach((station) => {
     const lat = parseFloat(
@@ -105,8 +108,8 @@ function displayStations(map, stations) {
 
     marker.addListener("click", () => {
       closeJourneyPlannerPopup();
-      showStationInfoInSidebar(station);
       handleStationSelection(station);
+      fetchDynamicStationData(station.number);
     });
 
     marker.addListener("mouseover", () => {
@@ -147,7 +150,6 @@ function displayStations(map, stations) {
       infoWindow.close();
     });
   });
-
   if (
     typeof google !== "undefined" &&
     google.maps &&
