@@ -1,47 +1,16 @@
-// 🌐 Initialize map without relying on Google Maps API
+// 🌐 Fallback map display (without Google Maps API)
 function initMapWithoutAPI() {
   console.log("Fallback map initialization in use.");
 
-  // Show a simple placeholder map view
   const mapElement = document.getElementById("map");
   mapElement.innerHTML =
-    '<div style="width:100%;height:100%;display:flex;justify-content:center;align-items:center;background-color:#f0f0f0;"><p>Map failed to load. You can still use the station list.</p></div>';
-
-  // Create mock map and google objects to prevent runtime errors
-  window.map = { getCenter: () => ({ lat: 53.349805, lng: -6.26031 }) };
-  window.google = {
-    maps: {
-      Map: function () {
-        return window.map;
-      },
-      Marker: function () {
-        return {
-          setMap: () => {},
-          getPosition: () => ({ lat: () => 53.349805, lng: () => -6.26031 }),
-        };
-      },
-      InfoWindow: function () {
-        return { open: () => {} };
-      },
-      LatLngBounds: function () {
-        return {
-          extend: () => {},
-          getCenter: () => ({ lat: 53.349805, lng: -6.26031 }),
-        };
-      },
-      SymbolPath: { CIRCLE: 0 },
-      event: { addListener: () => {} },
-    },
-  };
-
-  // Load stations as fallback
-  loadStations(window.map);
+    '<div style="width:100%;height:100%;display:flex;justify-content:center;align-items:center;background-color:#f0f0f0;"><p>❌ Map failed to load. You can still use the station list.</p></div>';
 }
 
 // 🗺️ Initialize map using Google Maps API
 function initMap() {
   try {
-    const location = { lat: 53.349805, lng: -6.26031 }; // Center of Dublin
+    const location = { lat: 53.349805, lng: -6.26031 };
     const map = new google.maps.Map(document.getElementById("map"), {
       zoom: 14,
       center: location,
@@ -50,8 +19,6 @@ function initMap() {
     });
 
     window.map = map;
-
-    // Load station data from backend
     loadStations(map);
   } catch (e) {
     console.error("Error initializing map:", e);
@@ -59,67 +26,59 @@ function initMap() {
   }
 }
 
-// 🚲 Load bike stations from database (via API)
+// 🚲 Load station data
 function loadStations(map) {
   fetch("http://localhost:5000/get_stations")
     .then((response) => response.json())
     .then((data) => {
       window.stationsData = data;
-      console.log("++++++++++++++++++++++++++");
-      console.log(data);
-
-      // Place markers on the map
+      console.log("Loaded station data:", data);
       displayStations(map, data);
     })
     .catch((error) => {
       console.error("Error loading stations:", error);
-
-      // If fetch fails, fall back to generated mock data
       const mockStations = generateMockStations();
       window.stationsData = mockStations;
       displayStations(map, mockStations);
     });
 }
 
-// 🛠️ Generate fake stations for fallback display
+// 🛠️ Generate mock stations
 function generateMockStations() {
-  const dublinCenter = { lat: 53.349805, lng: -6.26031 };
-  const mockStations = [];
-
+  const center = { lat: 53.349805, lng: -6.26031 };
+  const mock = [];
   for (let i = 1; i <= 20; i++) {
-    const lat = dublinCenter.lat + (Math.random() - 0.5) * 0.02;
-    const lng = dublinCenter.lng + (Math.random() - 0.5) * 0.03;
-
-    mockStations.push({
-      Number: i,
-      Name: `Mock station ${i}`,
-      Address: `Mock address ${i}`,
-      Latitude: lat,
-      Longitude: lng,
-      Bike_stands: Math.floor(Math.random() * 20) + 10,
-      Available_bikes: Math.floor(Math.random() * 10) + 1,
-      Available_bike_stands: Math.floor(Math.random() * 10) + 1,
+    const lat = center.lat + (Math.random() - 0.5) * 0.02;
+    const lng = center.lng + (Math.random() - 0.5) * 0.03;
+    mock.push({
+      number: i,
+      name: `Mock Station ${i}`,
+      address: `Mock address ${i}`,
+      latitude: lat,
+      longitude: lng,
+      bike_stands: Math.floor(Math.random() * 20) + 10,
+      available_bikes: Math.floor(Math.random() * 10) + 1,
+      available_bike_stands: Math.floor(Math.random() * 10) + 1,
     });
   }
-
-  return mockStations;
+  return mock;
 }
 
-// 📍 Display station markers on the map
+// 📍 Display markers
 function displayStations(map, stations) {
-  // Clear existing markers
   if (window.stationMarkers) {
     window.stationMarkers.forEach((marker) => marker.setMap(null));
   }
   window.stationMarkers = [];
 
-  // Iterate through each station and place a marker
   stations.forEach((station) => {
-    // Parse latitude and longitude (from different key cases)
-    const lat = parseFloat(station.position_lat || station.Latitude || 0);
-    const lng = parseFloat(station.position_lon || station.Longitude || 0);
+    const lat = parseFloat(
+      station.position_lat || station.latitude || station.Latitude || 0
+    );
+    const lng = parseFloat(
+      station.position_lon || station.longitude || station.Longitude || 0
+    );
 
-    // Skip stations with invalid coordinates
     if (isNaN(lat) || isNaN(lng) || (lat === 0 && lng === 0)) {
       console.warn(
         "Invalid coordinates for station:",
@@ -128,11 +87,10 @@ function displayStations(map, stations) {
       return;
     }
 
-    // Create and place marker on map
     const marker = new google.maps.Marker({
       position: { lat, lng },
       map: map,
-      title: station.name, // Tooltip label
+      title: station.name || station.Name,
       icon: {
         path: google.maps.SymbolPath.CIRCLE,
         fillColor: "#3388ff",
@@ -143,28 +101,32 @@ function displayStations(map, stations) {
       },
     });
 
-    // Store marker for future reference
     window.stationMarkers.push(marker);
 
-    // Attach click event to marker
     marker.addListener("click", () => {
-      closeJourneyPlannerPopup(); // Close planner if open
-      showStationInfoInSidebar(station); // Show station info
-      handleStationSelection(station); // Set start/end for journey
+      closeJourneyPlannerPopup();
+      showStationInfoInSidebar(station);
+      handleStationSelection(station);
     });
   });
 
-  // Add all markers to the map
-  window.stationMarkers.forEach((marker) => marker.setMap(map));
+  if (
+    typeof google !== "undefined" &&
+    google.maps &&
+    map instanceof google.maps.Map
+  ) {
+    window.stationMarkers.forEach((marker) => marker.setMap(map));
+  }
 }
 
-// 🚀 When page is ready, initialize the map (with fallback)
+// 🚀 DOM Ready: Initialize map
+
 document.addEventListener("DOMContentLoaded", function () {
-  if (typeof google === "undefined" || !google.maps) {
-    console.warn("Google Maps API failed to load, using fallback map.");
-    initMapWithoutAPI();
-  } else {
-    console.log("Google Maps API loaded, initializing map.");
+  if (typeof google !== "undefined" && google.maps && google.maps.Map) {
+    console.log("✅ Google Maps API loaded, initializing map.");
     initMap();
+  } else {
+    console.warn("⚠️ Google Maps API failed to load, using fallback.");
+    initMapWithoutAPI();
   }
 });
