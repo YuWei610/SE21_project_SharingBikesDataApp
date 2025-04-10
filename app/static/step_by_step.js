@@ -18,6 +18,10 @@ function initMap() {
       mapTypeControl: false,
     });
 
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(map);
+
     window.map = map;
     loadStations(map);
   } catch (e) {
@@ -242,4 +246,31 @@ function handleStationSelection(station) {
 
 function showStationInfoInSidebar(station) {
   console.log("Sidebar info (can be expanded):", station);
+}
+
+// Function used to calculate and display the route on Google Map
+function calculateRoute() {
+  var start = document.getElementById('start-location').value;
+  var destination = document.getElementById('end-location').value;
+
+  if (start && destination) {
+      start = start + ', Dublin';
+      destination = destination + ', Dublin';
+     
+      var request = {
+          origin: start,
+          destination: destination,
+          travelMode: google.maps.TravelMode.BICYCLING,  
+      };
+
+      directionsService.route(request, function(response, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+            directionsRenderer.setDirections(response); // Show the route
+        } else {
+            alert('Could not find a route between the locations.');
+        }
+      });
+  } else {
+      alert('Please enter both start and destination locations.');
+  }
 }
