@@ -61,6 +61,9 @@ data.rename(columns={
 # Drop rows with missing values after merge (just to be safe)
 data.dropna(inplace=True)
 
+# One-hot encode station_id (categorical)
+data = pd.get_dummies(data, columns=["station_id"], prefix="station")
+
 # Show preview
 print(data.head())
 
