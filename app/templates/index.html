@@ -1,6 +1,213 @@
 <!DOCTYPE html>
 <html>
+    <head><!DOCTYPE html>
+<html>
     <head>
+        <title>Group21-DublinBikes</title>
+    
+        <link rel="stylesheet" href="{{ url_for('static', filename='dublin_bikes_app.css') }}">
+    
+        <!-- Google Maps API：移除 callback，讓 JS 檔內自己控制 initMap() 呼叫 -->
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap" async defer></script>
+    </head>
+<body>
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <div class="logo">Dublin Bikes</div>
+        <div class="weather-container">
+            <div class="weather" id="weather">Loading weather...</div>
+        </div>
+        <div class="nav-links">
+            <button onclick="toggleFilterModal()" class="prediction-btn">Prediction</button>
+		</div>
+    </div>
+
+    <!-- 侧边栏和地图 -->
+    <div class="container">
+        <!-- 侧边栏 -->
+        <div class="sidebar" style="padding-top: 50px;">
+            <div class="map-buttons" style="margin-top: 50px;">
+                <button id="map-view-btn" type="button">地图</button>
+                <button id="satellite-view-btn" type="button">卫星图像</button>
+                <button id="journey-planner-btn" type="button" disabled style="background-color: #888; opacity: 0.6; cursor: not-allowed;">Back to Station Detail</button>
+            </div>
+            <h2 style="font-size: 18px; color: #333; margin-bottom: 15px;">Plan Your Journey</h2>
+            <form id="route-planner-form">
+                <div class="form-control">
+                    <label for="start-location" style="font-size: 14px; color: #555; margin-bottom: 5px; display: block;">Start location:</label>
+                    <input type="text" id="start-location" placeholder="Enter start location..." style="height: 32px; border-radius: 8px; font-size: 13px; padding: 0 1px; border: 1px solid #ccc; width: 100%;"/>
+                </div>
+                
+                <div class="form-control">
+                    <label for="end-location" style="font-size: 14px; color: #555; margin-bottom: 5px; display: block;">End location:</label>
+                    <input type="text" id="end-location" placeholder="Enter end location..." style="height: 32px; border-radius: 8px; font-size: 13px; padding: 0 1px; border: 1px solid #ccc; width: 100%;"/>
+                </div>
+                
+                <div class="form-control">
+                    <button type="button" id="plan-journey-btn" style="height: 36px; border-radius: 18px; font-size: 14px; background-color: #4285f4; color: white; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">Plan route</button>
+                </div>
+            </form>
+            
+            <!-- 路线详情容器 -->
+            <div id="route-details" style="display: none;">
+                <h3>Route details</h3>
+                <div id="route-details-content"></div>
+            </div>
+            
+            <!-- 添加站点详情面板 -->
+            <div id="station-details" style="display: none;">
+                <h3>Station details</h3>
+                <div id="station-info-content"></div>
+            </div>
+        </div>
+
+        <!-- 地图部分 -->
+        <div class="map">
+            <div id="map" style="width: 100%; height: 100%;">
+                <!-- 移除Google Maps API的异步加载
+                <script>
+                    // 改为不依赖Google API的初始化
+                    window.onload = function() {
+                        // 如果没有Google Maps API，则使用备用初始化方法
+                        if (typeof google === 'undefined') {
+                            console.log("Google Maps API 不可用，使用备用地图显示");
+                            initMapWithoutAPI();
+                        } else {
+                            loadGoogleMapsScript();
+                        }
+                    };
+                    
+                    function loadGoogleMapsScript() {
+                        try {
+                            const script = document.createElement('script');
+                            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBm9UnzDLdgIHQ1i_Fp4zfRZL6nuEM73t8&libraries=places,directions&language=zh-CN&callback=initMap';
+                            script.async = true;
+                            script.defer = true;
+                            script.onerror = function() {
+                                console.error("加载Google Maps API失败，使用备用地图");
+                                initMapWithoutAPI();
+                            };
+                            document.body.appendChild(script);
+                        } catch (e) {
+                            console.error("加载脚本时出错:", e);
+                            initMapWithoutAPI();
+                        }
+                    }
+                </script> -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- 添加筛选浮窗 -->
+    <div id="filter-modal" class="filter-modal collapsed">
+        <h3>
+            Data Filter
+            <button onclick="toggleFilterModal()">✕</button>
+        </h3>
+        
+        <div class="form-group">
+            <label for="station-select">Select Station:</label>
+            <select id="station-select">
+                <option value="">All Stations</option>
+                <!-- Station options will be dynamically populated by JavaScript -->
+            </select>
+            </div>
+        
+        <div class="form-group">
+            <label for="time-select">Select Time:</label>
+            <select id="time-select">
+                <option value="0">00:00</option>
+                <option value="1">01:00</option>
+                <option value="2">02:00</option>
+                <option value="3">03:00</option>
+                <option value="4">04:00</option>
+                <option value="5">05:00</option>
+                <option value="6">06:00</option>
+                <option value="7">07:00</option>
+                <option value="8">08:00</option>
+                <option value="9">09:00</option>
+                <option value="10">10:00</option>
+                <option value="11">11:00</option>
+                <option value="12">12:00</option>
+                <option value="13">13:00</option>
+                <option value="14">14:00</option>
+                <option value="15">15:00</option>
+                <option value="16">16:00</option>
+                <option value="17">17:00</option>
+                <option value="18">18:00</option>
+                <option value="19">19:00</option>
+                <option value="20">20:00</option>
+                <option value="21">21:00</option>
+                <option value="22">22:00</option>
+                <option value="23">23:00</option>
+            </select>
+        </div>
+        
+        <div class="actions">
+            <button class="reset-btn" onclick="resetFilters()">Reset</button>
+            <button class="apply-btn" onclick="applyFilters()">Apply</button>
+    </div>
+
+        <!-- Data Results Display Area -->
+        <div id="filter-results" class="filter-results">
+            <div class="results-header">
+                <h4>Filter Results</h4>
+            </div>
+            <div class="results-content">
+                <!-- Backend data will be displayed here -->
+                <p class="placeholder-text">Results will be displayed after applying filters...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加站点详情弹窗 -->
+    <div id="station-popup" class="station-popup" onclick="event.stopPropagation()">
+      <div class="station-popup-header">
+        <h3 id="station-popup-title">Station Details</h3>
+        <button class="station-popup-close" onclick="closeStationPopup()">✕</button>
+      </div>
+      <div class="station-popup-body">
+        <!-- 添加跳转到行程规划的按钮 -->
+        <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+          <button id="to-journey-planner-btn" style="background-color: #4285f4; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Plan My Journey</button>
+        </div>
+        
+        <div class="station-popup-info" id="station-popup-content">
+          <!-- 站点信息将动态填充 -->
+        </div>
+        
+        <!-- 站点统计图表 -->
+        <div class="station-charts" id="station-charts">
+          <div class="station-chart">
+            <h4>Average Available Bikes (by hour)</h4>
+            <div class="chart-container" id="bikes-chart-container"></div>
+            <div class="time-labels" id="bikes-time-labels"></div>
+          </div>
+          
+          <div class="station-chart">
+            <h4>Average Available Stands (by hour)</h4>
+            <div class="chart-container" id="stands-chart-container"></div>
+            <div class="time-labels" id="stands-time-labels"></div>
+          </div>
+        </div>
+        
+        <!-- 将按钮移到图表底部 -->
+        <div class="station-popup-actions" style="margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 15px;">
+          <button class="station-popup-btn start" id="set-as-start-btn">Set as Start</button>
+          <button class="station-popup-btn end" id="set-as-end-btn">Set as End</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 添加遮罩层，添加onclick事件 -->
+    <div id="overlay" class="overlay" onclick="closeAllPopups()"></div>
+
+    <!-- <script src="{{ url_for('static', filename='dublin_bikes_app.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='step_by_step.js') }}"></script>
+  </body>
+</html>
+
+
         <title>Group21-DublinBikes</title>
     
         <link rel="stylesheet" href="{{ url_for('static', filename='dublin_bikes_app.css') }}">
