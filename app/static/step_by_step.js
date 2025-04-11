@@ -600,3 +600,29 @@ function closeStationPopup() {
     // 因为我们希望用户可以通过按钮回到上次查看的站点
   }
 }
+
+function calculateRoute() {
+  var start = document.getElementById('startinglocation').value;
+  var destination = document.getElementById('destination').value;
+
+  if (start && destination) {
+      start = start + ', Dublin';
+      destination = destination + ', Dublin';
+     
+      var request = {
+          origin: start,
+          destination: destination,
+          travelMode: google.maps.TravelMode.BICYCLING,  
+      };
+
+      directionsService.route(request, function(response, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+              directionsRenderer.setDirections(response);
+          } else {
+              alert('Could not find a route between the locations.');
+          }
+      });
+  } else {
+      alert('Please enter both start and destination locations.');
+  }
+}
