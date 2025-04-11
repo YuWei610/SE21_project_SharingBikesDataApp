@@ -606,8 +606,8 @@ function closeStationPopup() {
 }
 
 function calculateRoute() {
-  var start = document.getElementById('startinglocation').value;
-  var destination = document.getElementById('destination').value;
+  var start = document.getElementById('start-location').value;
+  var destination = document.getElementById('end-location').value;
 
   if (start && destination) {
       start = start + ', Dublin';
