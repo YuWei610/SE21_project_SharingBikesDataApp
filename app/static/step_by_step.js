@@ -18,6 +18,10 @@ function initMap() {
       mapTypeControl: false,
     });
 
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(map);
+    
     window.map = map;
     loadStations(map);
   } catch (e) {
