@@ -167,6 +167,8 @@ def predict_availability():
             return jsonify({"error": "Invalid or missing JSON"}), 400
         
         station_id = int(data['station_id'])
+        print("++++++++++++++++++++++++++++++++")
+        print("station_id", station_id)
 
         # 1. Get current time and day info
         now = datetime.now()
@@ -174,6 +176,8 @@ def predict_availability():
         day_of_week = now.weekday() + 1  # Monday = 1, Sunday = 7
 
         selected_hour = int(data['hour'])
+        print("++++++++++++++++++++++++++++++++++")
+        print("selected_hour :", selected_hour )
 
         # If the selected time is in the past, return a warning
         if selected_hour < current_hour:
