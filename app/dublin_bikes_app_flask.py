@@ -5,6 +5,7 @@ import os
 import requests
 import dbinfo
 from datetime import datetime
+import pytz
 import pandas as pd
 import matplotlib.pyplot as plt
 from call_api_function.call_api_single_stations import call_api_single_stations
@@ -171,7 +172,8 @@ def predict_availability():
         print("station_id : ", station_id)
 
         # 1. Get current time and day info
-        now = datetime.now()
+        tz = pytz.timezone("Europe/Dublin")
+        now = datetime.now(tz)
         current_hour = now.hour
         print("++++++++++++++++++++++++++++++++++")
         print("current_hour : ", current_hour)
