@@ -168,14 +168,18 @@ def predict_availability():
         
         station_id = int(data['station_id'])
         print("++++++++++++++++++++++++++++++++")
-        print("station_id", station_id)
+        print("station_id : ", station_id)
 
         # 1. Get current time and day info
         now = datetime.now()
         current_hour = now.hour
+        print("++++++++++++++++++++++++++++++++++")
+        print("current_hour : ", current_hour)
         day_of_week = now.weekday() + 1  # Monday = 1, Sunday = 7
 
         selected_hour = int(data['hour'])
+        if selected_hour  == 12 :
+            selected_hour = 0
         print("++++++++++++++++++++++++++++++++++")
         print("selected_hour :", selected_hour )
 
