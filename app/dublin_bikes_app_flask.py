@@ -216,11 +216,24 @@ def predict_availability():
             "day_of_week": day_of_week
         }])
 
-        # 5. Run predictions using the pre-trained models
+        # 5. One-hot encode the station_id
+        input_df = pd.get_dummies(input_df, columns=["station_id"])
+
+        # 6. Load feature columns used model
+        trained_columns = bike_model.feature_names_in_.tolist()
+
+
+        # 7. Add any missing columns with default 0, and reorder to match training
+        for col in trained_columns:
+            if col not in input_df.columns:
+                input_df[col] = 0
+        input_df = input_df[trained_columns]
+
+        # 8. Run predictions using the pre-trained models
         predicted_bikes = int(round(bike_model.predict(input_df)[0]))
         predicted_stands = int(round(stand_model.predict(input_df)[0]))
 
-        # Return predictions to frontend
+        # 9. Return predictions to frontend
         return jsonify({
             "bikes": predicted_bikes,
             "bike_stands": predicted_stands
