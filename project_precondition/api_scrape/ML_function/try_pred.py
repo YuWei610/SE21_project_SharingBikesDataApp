@@ -90,13 +90,12 @@ def predict_availability(station_id, hour):
     predicted_stands = int(round(stand_model.predict(input_df)[0]))
 
     # 9. Return predictions to frontend
-    return {
+    return jsonify({
         "bikes": predicted_bikes,
         "bike_stands": predicted_stands
-    }
+    })
 
 
 
 result = predict_availability(42, 3)
-print()
 print(result)
