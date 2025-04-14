@@ -64,7 +64,7 @@ def stations_to_db(text_data, in_engine):
 
 def main():
     USER = "root"
-    PASSWORD = "betty766"
+    PASSWORD = "*******6"
     PORT = "3306"
     DB = "se21_local"
     URI = "127.0.0.1"
