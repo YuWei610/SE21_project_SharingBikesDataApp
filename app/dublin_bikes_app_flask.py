@@ -12,22 +12,9 @@ from call_api_function.call_api_single_stations import call_api_single_stations
 from call_api_function.call_api_weather_by_latlon import call_api_weather
 
 import joblib
-# Commented out model loading to avoid ModuleNotFoundError: No module named 'numpy._core' error
 # Load models once
-# bike_model = joblib.load("ML_function/bike_availability_model.pkl")
-# stand_model = joblib.load("ML_function/bike_stand_availability_model.pkl")
-# Create mock model variables as substitutes
-class DummyModel:
-    def __init__(self):
-        self.feature_names_in_ = ['station_id', 'temperature', 'precipitation', 'wind_speed', 'hour', 'day_of_week']
-    
-    def predict(self, X):
-        # Return simulated prediction values (random values)
-        import random
-        return [random.randint(5, 15)]
-
-bike_model = DummyModel()
-stand_model = DummyModel()
+bike_model = joblib.load("ML_function/bike_availability_model.pkl")
+stand_model = joblib.load("ML_function/bike_stand_availability_model.pkl")
 
 load_dotenv()
 
@@ -283,7 +270,7 @@ def get_all_stations():
 #         weather_data = call_api_weather(lat, lon)
 #         current_weather = weather_data.get("current", {})
 
-#         # Convert to Celsius (API returns temperature in Kelvin)
+#         # Convert to Celsius (API gives temperature in Kelvin)
 #         temp_celsius = round(current_weather.get("temp", 273.15) - 273.15, 2)
 #         description = current_weather.get("weather", [{}])[0].get("description", "N/A").capitalize()
 
