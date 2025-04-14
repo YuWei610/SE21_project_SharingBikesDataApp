@@ -7,7 +7,7 @@ class TestEdgeCases(unittest.TestCase):
         self.client = app.test_client()
 
     def test_invalid_station(self):
-        response = self.client.get("/dynamic/999999")  # 不存在的 station id
+        response = self.client.get("/dynamic/999999")  # not exist station id
         self.assertIn(response.status_code, [400, 404, 500])
 
     def test_missing_predict_body(self):
