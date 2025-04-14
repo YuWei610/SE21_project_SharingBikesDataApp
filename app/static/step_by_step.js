@@ -240,6 +240,9 @@ function fetchDynamicStationData(stationNumber) {
 
       const content = document.getElementById("station-popup-content");
       content.innerHTML = `
+          <p><strong>Station Number:</strong> ${station.number}</p>
+          <p><strong>Station Name:</strong> ${station.name}</p>
+          <p><strong>Address:</strong> ${station.address}</p>
           <p><strong>Available Bikes:</strong> ${data.available_bikes}</p>
           <p><strong>Available Stands:</strong> ${data.available_bike_stands}</p>
           <p><strong>Mechanical Bikes:</strong> ${data.mechanical_bikes}</p>
@@ -626,7 +629,7 @@ function resetFilters() {
   // Clear the filter results
   const resultsContent = document.querySelector(".results-content");
   if (resultsContent) {
-    resultsContent.innerHTML = '<p class="placeholder-text">Results will be displayed after applying filters...</p>';
+    resultsContent.innerHTML = '<p class="placeholder-text">Results will be displayed after applying target station and hour...</p>';
   }
 }
 
