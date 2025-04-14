@@ -5,11 +5,11 @@
     
         <link rel="stylesheet" href="{{ url_for('static', filename='dublin_bikes_app.css') }}">
     
-        <!-- Google Maps API：移除 callback，讓 JS 檔內自己控制 initMap() 呼叫 -->
+        <!-- Google Maps API: Removed the callback to let the JS file control the initMap() call internally -->
         <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap" async defer></script>
     </head>
 <body>
-    <!-- 导航栏 -->
+    <!-- Navigation Bar -->
     <div class="navbar">
         <div class="logo">Dublin Bikes</div>
         <div class="weather-container">
@@ -20,9 +20,9 @@
 		</div>
     </div>
 
-    <!-- 侧边栏和地图 -->
+    <!-- Sidebar and Map -->
     <div class="container">
-        <!-- 侧边栏 -->
+        <!-- Sidebar -->
         <div class="sidebar" style="padding-top: 50px;">
             <div class="map-buttons" style="margin-top: 50px;">
                 <button id="map-view-btn" type="button">MAP</button>
@@ -46,29 +46,29 @@
                 </div>
             </form>
             
-            <!-- 路线详情容器 -->
+            <!-- Route Details Container -->
             <div id="route-details" style="display: none;">
                 <h3>Route details</h3>
                 <div id="route-details-content"></div>
             </div>
             
-            <!-- 添加站点详情面板 -->
+            <!-- Add Station Details Panel -->
             <div id="station-details" style="display: none;">
                 <h3>Station details</h3>
                 <div id="station-info-content"></div>
             </div>
         </div>
 
-        <!-- 地图部分 -->
+        <!-- Map Section -->
         <div class="map">
             <div id="map" style="width: 100%; height: 100%;">
-                <!-- 移除Google Maps API的异步加载
+                <!-- Removed asynchronous loading of the Google Maps API
                 <script>
-                    // 改为不依赖Google API的初始化
+                    // Changed to initialize without relying on the Google API
                     window.onload = function() {
-                        // 如果没有Google Maps API，则使用备用初始化方法
+                        // Use fallback initialization method if Google Maps API is not available
                         if (typeof google === 'undefined') {
-                            console.log("Google Maps API 不可用，使用备用地图显示");
+                            console.log("Google Maps API unavailable, using fallback map display");
                             initMapWithoutAPI();
                         } else {
                             loadGoogleMapsScript();
@@ -82,12 +82,12 @@
                             script.async = true;
                             script.defer = true;
                             script.onerror = function() {
-                                console.error("加载Google Maps API失败，使用备用地图");
+                                console.error("Failed to load Google Maps API, using fallback map");
                                 initMapWithoutAPI();
                             };
                             document.body.appendChild(script);
                         } catch (e) {
-                            console.error("加载脚本时出错:", e);
+                            console.error("Error loading script:", e);
                             initMapWithoutAPI();
                         }
                     }
@@ -95,8 +95,7 @@
             </div>
         </div>
     </div>
-    
-    <!-- 添加筛选浮窗 -->
+    <!-- Add Filter Popup -->
     <div id="filter-modal" class="filter-modal collapsed">
         <h3>
             Data Filter
@@ -158,23 +157,23 @@
         </div>
     </div>
 
-    <!-- 添加站点详情弹窗 -->
+    <!-- Add Station Details Popup -->
     <div id="station-popup" class="station-popup" onclick="event.stopPropagation()">
       <div class="station-popup-header">
         <h3 id="station-popup-title">Station Details</h3>
         <button class="station-popup-close" onclick="closeStationPopup()">✕</button>
       </div>
       <div class="station-popup-body">
-        <!-- 添加跳转到行程规划的按钮 -->
+        <!-- Add Button to Navigate to Route Planner -->
         <div style="display: flex; justify-content: center; margin-bottom: 15px;">
           <button id="to-journey-planner-btn" style="background-color: #4285f4; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Plan My Journey</button>
         </div>
         
         <div class="station-popup-info" id="station-popup-content">
-          <!-- 站点信息将动态填充 -->
+          <!-- Station information will be populated dynamically -->
         </div>
         
-        <!-- 站点统计图表 -->
+        <!-- Station Statistics Chart -->
         <div class="station-charts" id="station-charts">
           <div class="station-chart">
             <h4>Average Available Bikes (by hour)</h4>
@@ -189,7 +188,7 @@
           </div>
         </div>
         
-        <!-- 将按钮移到图表底部 -->
+        <!-- Moved the button to the bottom of the chart -->
         <div class="station-popup-actions" style="margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 15px;">
           <button class="station-popup-btn start" id="set-as-start-btn">Set as Start</button>
           <button class="station-popup-btn end" id="set-as-end-btn">Set as End</button>
@@ -197,7 +196,7 @@
       </div>
     </div>
     
-    <!-- 添加遮罩层，添加onclick事件 -->
+    <!-- Add overlay layer and attach onclick event -->
     <div id="overlay" class="overlay" onclick="closeAllPopups()"></div>
 
     <!-- <script src="{{ url_for('static', filename='dublin_bikes_app.js') }}"></script> -->
