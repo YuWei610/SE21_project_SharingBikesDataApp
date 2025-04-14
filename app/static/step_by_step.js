@@ -68,7 +68,7 @@ function initMap() {
 
 // Load station data
 function loadStations(map) {
-  fetch("http://localhost:5001/get_stations")
+  fetch("http://localhost:5000/get_stations")
     .then((response) => response.json())
     .then((data) => {
       window.stationsData = data;
@@ -159,7 +159,7 @@ function displayStations(map, stations) {
           infoWindow.setContent(hoverCache.get(station.number));
           infoWindow.open(map, marker);
         } else {
-          fetch(`http://localhost:5001/dynamic/${station.number}`)
+          fetch(`http://localhost:5000/dynamic/${station.number}`)
             .then((res) => res.json())
             .then((data) => {
               const content = `
@@ -217,7 +217,7 @@ function displayStations(map, stations) {
 
 // Fetch live station info and show popup
 function fetchDynamicStationData(stationNumber) {
-  fetch(`http://localhost:5001/dynamic/${stationNumber}`)
+  fetch(`http://localhost:5000/dynamic/${stationNumber}`)
     .then((res) => res.json())
     .then((data) => {
       const popup = document.getElementById("station-popup");
@@ -430,7 +430,7 @@ function generateChart(containerId, labelsId, data, hours, type) {
 
 // Fetch and display weather summary
 function loadWeatherSummary() {
-  fetch("http://localhost:5001/get_weather_summary")
+  fetch("http://localhost:5000/get_weather_summary")
     .then((res) => res.json())
     .then((data) => {
       const weatherDiv = document.getElementById("weather");
@@ -597,7 +597,7 @@ function loadStationOptions() {
   }
   
   // Fetch station data from the API
-  fetch("http://localhost:5001/get_all_stations")
+  fetch("http://localhost:5000/get_all_stations")
     .then(response => response.json())
     .then(data => {
       if (data.stations && Array.isArray(data.stations)) {
@@ -651,7 +651,7 @@ function applyFilters() {
   };
   
   // Send the request to the API
-  fetch("http://localhost:5001/predict_availability", {
+  fetch("http://localhost:5000/predict_availability", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
