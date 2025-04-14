@@ -19,7 +19,7 @@ import api_config
 """
 api_config.API_CONFIG:
         "stations_v3": {
-        "apiKey": "29eb88187a0abad2baa09b51a856699b8f4bc972",
+        "apiKey": "YOUR_API_KEY",
         "stations_url": "https://api.jcdecaux.com/vls/v3/stations",
         "contract" : "dublin"
     }
