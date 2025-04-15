@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import sys
-sys.path.append('..')  # 添加父目录到搜索路径
+sys.path.append('..')
 import dbinfo
 
 load_dotenv()
@@ -9,7 +9,7 @@ load_dotenv()
 # Load environment variables from the .env file
 # load_dotenv()  # It looks for a .env file in the current directory
 
-# 使用dbinfo中的API密钥
+
 # BIKE_API_KEY = dbinfo.JCKEY
 # CONTRACT = dbinfo.NAME
 # WEATHER_API_KEY = "597b17711b1b951ff3254b78f58df59d"  # 使用dublin_bikes_app.js中的OpenWeatherMap API密钥
