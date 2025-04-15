@@ -37,7 +37,8 @@ mycursor = mydb.cursor()
 from flask_cors import CORS
 
 app = Flask(__name__, static_url_path="")
-CORS(app)
+# CORS(app)
+CORS(app, resources={r"/": {"origins": ""}})
 
 
 
