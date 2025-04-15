@@ -683,10 +683,6 @@ function applyFilters() {
               <span>Predicted Available Bikes:</span>
               <span class="highlight">${data.bikes}</span>
             </div>
-            <div class="result-item">
-              <span>Predicted Available Stands:</span>
-              <span class="highlight">${data.bike_stands}</span>
-            </div>
           `;
         }
       }
