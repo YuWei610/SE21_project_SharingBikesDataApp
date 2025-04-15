@@ -21,45 +21,50 @@ function initMap() {
     directionsService = new google.maps.DirectionsService();
     directionsRenderer = new google.maps.DirectionsRenderer();
     directionsRenderer.setMap(map);
-    
+
     window.map = map;
     loadStations(map);
-    
+
     // Add event listeners for "Set as Start" and "Set as End" buttons
-    document.getElementById("set-as-start-btn").addEventListener("click", function() {
-      if (window.lastSelectedStation) {
-        document.getElementById("start-location").value = window.lastSelectedStation.address;
-        closeStationPopup();
-      }
-    });
-    
-    document.getElementById("set-as-end-btn").addEventListener("click", function() {
-      if (window.lastSelectedStation) {
-        document.getElementById("end-location").value = window.lastSelectedStation.address;
-        closeStationPopup();
-      }
-    });
-    
+    document
+      .getElementById("set-as-start-btn")
+      .addEventListener("click", function () {
+        if (window.lastSelectedStation) {
+          document.getElementById("start-location").value =
+            window.lastSelectedStation.address;
+          closeStationPopup();
+        }
+      });
+
+    document
+      .getElementById("set-as-end-btn")
+      .addEventListener("click", function () {
+        if (window.lastSelectedStation) {
+          document.getElementById("end-location").value =
+            window.lastSelectedStation.address;
+          closeStationPopup();
+        }
+      });
+
     // Add map view toggle functionality
     const mapViewBtn = document.getElementById("map-view-btn");
     const satelliteViewBtn = document.getElementById("satellite-view-btn");
-    
+
     if (mapViewBtn) {
-      mapViewBtn.addEventListener("click", function() {
+      mapViewBtn.addEventListener("click", function () {
         map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
         mapViewBtn.style.backgroundColor = "#333";
         satelliteViewBtn.style.backgroundColor = "#555";
       });
     }
-    
+
     if (satelliteViewBtn) {
-      satelliteViewBtn.addEventListener("click", function() {
+      satelliteViewBtn.addEventListener("click", function () {
         map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
         satelliteViewBtn.style.backgroundColor = "#333";
         mapViewBtn.style.backgroundColor = "#555";
       });
     }
-    
   } catch (e) {
     console.error("Error initializing map:", e);
     initMapWithoutAPI();
@@ -68,7 +73,7 @@ function initMap() {
 
 // Load station data
 function loadStations(map) {
-  fetch("http://localhost:5000/get_stations")
+  fetch("/get_stations")
     .then((response) => response.json())
     .then((data) => {
       window.stationsData = data;
@@ -159,7 +164,7 @@ function displayStations(map, stations) {
           infoWindow.setContent(hoverCache.get(station.number));
           infoWindow.open(map, marker);
         } else {
-          fetch(`http://localhost:5000/dynamic/${station.number}`)
+          fetch(`/dynamic/${station.number}`)
             .then((res) => res.json())
             .then((data) => {
               const content = `
@@ -217,17 +222,19 @@ function displayStations(map, stations) {
 
 // Fetch live station info and show popup
 function fetchDynamicStationData(stationNumber) {
-  fetch(`http://localhost:5000/dynamic/${stationNumber}`)
+  fetch(`/dynamic/${stationNumber}`)
     .then((res) => res.json())
     .then((data) => {
       const popup = document.getElementById("station-popup");
       popup.style.display = "block";
 
       // Find and store information of the currently selected station
-      const station = window.stationsData.find(s => s.number == stationNumber);
+      const station = window.stationsData.find(
+        (s) => s.number == stationNumber
+      );
       if (station) {
         window.lastSelectedStation = station;
-        
+
         // Enable "Back to Station Detail" button
         const backButton = document.getElementById("journey-planner-btn");
         if (backButton) {
@@ -250,23 +257,23 @@ function fetchDynamicStationData(stationNumber) {
           <p><strong>Status:</strong> ${data.status}</p>
           <p><strong>Last Update:</strong> ${data.last_update}</p>
         `;
-        
+
       // Generate station chart
       generateStationCharts(stationNumber);
-      
+
       // Bind event listeners for "Set as Start" and "Set as End" buttons
       const startBtn = document.getElementById("set-as-start-btn");
       const endBtn = document.getElementById("set-as-end-btn");
-      
+
       if (startBtn) {
-        startBtn.onclick = function() {
+        startBtn.onclick = function () {
           document.getElementById("start-location").value = station.address;
           closeStationPopup();
         };
       }
-      
+
       if (endBtn) {
-        endBtn.onclick = function() {
+        endBtn.onclick = function () {
           document.getElementById("end-location").value = station.address;
           closeStationPopup();
         };
@@ -280,51 +287,65 @@ function fetchDynamicStationData(stationNumber) {
 // Generate station chart
 function generateStationCharts(stationId) {
   // Get the current day of the week
-  const dayOfWeek = new Date().toLocaleString('en-us', {weekday:'long'});
-  
+  const dayOfWeek = new Date().toLocaleString("en-us", { weekday: "long" });
+
   // Generate bike data
   const bikeData = generateStationSpecificBikeData(stationId);
   // Generate bike station data
   const standData = generateStationSpecificStandData(stationId);
-  
+
   // Display time range
-  const hours = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-  
+  const hours = [
+    5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+  ];
+
   // Style the chart container
   const bikeChartContainer = document.getElementById("bikes-chart-container");
   const standChartContainer = document.getElementById("stands-chart-container");
-  
+
   if (bikeChartContainer && standChartContainer) {
     bikeChartContainer.style.background = "#f8f9fa";
     bikeChartContainer.style.borderRadius = "8px";
     bikeChartContainer.style.marginBottom = "10px";
     bikeChartContainer.style.boxShadow = "inset 0 0 5px rgba(0,0,0,0.05)";
-    
+
     standChartContainer.style.background = "#f8f9fa";
     standChartContainer.style.borderRadius = "8px";
     standChartContainer.style.marginBottom = "10px";
     standChartContainer.style.boxShadow = "inset 0 0 5px rgba(0,0,0,0.05)";
-    
+
     // Update chart title styles
     const bikesTitle = document.querySelector(".station-chart:first-child h4");
     const standsTitle = document.querySelector(".station-chart:last-child h4");
-    
+
     if (bikesTitle && standsTitle) {
       bikesTitle.style.fontSize = "16px";
       bikesTitle.style.fontWeight = "600";
       bikesTitle.style.padding = "10px 0";
       bikesTitle.style.color = "#333";
-      
+
       standsTitle.style.fontSize = "16px";
       standsTitle.style.fontWeight = "600";
       standsTitle.style.padding = "10px 0";
       standsTitle.style.color = "#333";
     }
   }
-  
+
   // Generate chart
-  generateChart("bikes-chart-container", "bikes-time-labels", bikeData, hours, "bike");
-  generateChart("stands-chart-container", "stands-time-labels", standData, hours, "stand");
+  generateChart(
+    "bikes-chart-container",
+    "bikes-time-labels",
+    bikeData,
+    hours,
+    "bike"
+  );
+  generateChart(
+    "stands-chart-container",
+    "stands-time-labels",
+    standData,
+    hours,
+    "stand"
+  );
 }
 
 // Generate randomized but reasonable bike data based on the station
@@ -332,34 +353,34 @@ function generateStationSpecificBikeData(stationId) {
   const data = [];
   // Use station ID as a seed to generate pseudo-random numbers
   const seed = parseInt(stationId, 10) || 1;
-  
+
   // Generate weekday mode (low in the morning rush, high in the evening rush)
   const isWeekday = new Date().getDay() >= 1 && new Date().getDay() <= 5;
-  
+
   for (let hour = 5; hour <= 23; hour++) {
     let value;
     if (isWeekday) {
       // Weekday mode
       if (hour >= 7 && hour <= 9) {
         // Morning rush - Fewer bikes
-        value = Math.max(1, Math.floor(seed % 10 + Math.sin(hour) * 3 + 2));
+        value = Math.max(1, Math.floor((seed % 10) + Math.sin(hour) * 3 + 2));
       } else if (hour >= 16 && hour <= 19) {
         // Evening rush - More bikes
-        value = Math.min(20, Math.floor(seed % 10 + Math.cos(hour) * 3 + 10));
+        value = Math.min(20, Math.floor((seed % 10) + Math.cos(hour) * 3 + 10));
       } else {
         // Off-peak hours
-        value = Math.floor(seed % 10 + Math.sin(hour * seed) * 5 + 8);
+        value = Math.floor((seed % 10) + Math.sin(hour * seed) * 5 + 8);
       }
     } else {
       // Weekend mode - More balanced
-      value = Math.floor(seed % 10 + Math.sin(hour * 0.5) * 4 + 8);
+      value = Math.floor((seed % 10) + Math.sin(hour * 0.5) * 4 + 8);
     }
-    
+
     // Ensure data is within a reasonable range
     value = Math.max(0, Math.min(20, value));
     data.push(value);
   }
-  
+
   return data;
 }
 
@@ -367,73 +388,73 @@ function generateStationSpecificBikeData(stationId) {
 function generateStationSpecificStandData(stationId) {
   const bikeData = generateStationSpecificBikeData(stationId);
   // Bike station data complements bike data
-  return bikeData.map(bikes => Math.max(0, 20 - bikes));
+  return bikeData.map((bikes) => Math.max(0, 20 - bikes));
 }
 
 // Generate chart
 function generateChart(containerId, labelsId, data, hours, type) {
   const container = document.getElementById(containerId);
   const labelsContainer = document.getElementById(labelsId);
-  
+
   if (!container || !labelsContainer) return;
-  
+
   // Clear container
-  container.innerHTML = '';
-  labelsContainer.innerHTML = '';
-  
+  container.innerHTML = "";
+  labelsContainer.innerHTML = "";
+
   // Find the maximum value to calculate the ratio
   const maxValue = Math.max(...data, 1); // 至少为1避免除以0
-  
+
   // Add background
-  container.style.background = '#f9f9f9';
-  
+  container.style.background = "#f9f9f9";
+
   // Create bar chart and labels
   data.forEach((value, index) => {
     // Create bar chart
-    const bar = document.createElement('div');
+    const bar = document.createElement("div");
     bar.className = `chart-bar ${type}`;
-    
+
     // Update styles to match the second image
     bar.style.height = `${(value / maxValue) * 100}%`;
     bar.style.width = `${85 / data.length}%`; // 85% width, leaving gaps
     bar.style.margin = `0 ${7.5 / data.length}%`; // Evenly distribute gaps
-    
-    if (type === 'bike') {
-      bar.style.backgroundColor = '#4285f4'; // Brighter blue
+
+    if (type === "bike") {
+      bar.style.backgroundColor = "#4285f4"; // Brighter blue
     } else {
-      bar.style.backgroundColor = '#34a853'; // Brighter green
+      bar.style.backgroundColor = "#34a853"; // Brighter green
     }
-    
-    bar.style.borderRadius = '2px';
-    bar.setAttribute('data-value', value);
+
+    bar.style.borderRadius = "2px";
+    bar.setAttribute("data-value", value);
     container.appendChild(bar);
   });
-  
+
   // Create individual time labels, displayed every two hours
   // Create a complete time range array
   const allHours = [4, 6, 8, 10, 12, 14, 16, 18, 20, 22];
-  
+
   // Create labels for each time point
-  allHours.forEach(hour => {
-    const label = document.createElement('div');
-    label.className = 'time-label';
+  allHours.forEach((hour) => {
+    const label = document.createElement("div");
+    label.className = "time-label";
     label.textContent = `${hour}:00`;
-    label.style.width = `${100/allHours.length}%`;
-    label.style.color = '#666';
-    label.style.fontSize = '12px';
+    label.style.width = `${100 / allHours.length}%`;
+    label.style.color = "#666";
+    label.style.fontSize = "12px";
     labelsContainer.appendChild(label);
   });
-  
+
   // 调整标签容器样式
-  labelsContainer.style.display = 'flex';
-  labelsContainer.style.justifyContent = 'space-between';
-  labelsContainer.style.width = '100%';
-  labelsContainer.style.marginTop = '5px';
+  labelsContainer.style.display = "flex";
+  labelsContainer.style.justifyContent = "space-between";
+  labelsContainer.style.width = "100%";
+  labelsContainer.style.marginTop = "5px";
 }
 
 // Fetch and display weather summary
 function loadWeatherSummary() {
-  fetch("http://localhost:5000/get_weather_summary")
+  fetch("/get_weather_summary")
     .then((res) => res.json())
     .then((data) => {
       const weatherDiv = document.getElementById("weather");
@@ -460,41 +481,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 🌤️ Call weather summary on DOM ready
   loadWeatherSummary();
-  
+
   // Add click event to "Plan My Journey" button
   const journeyPlanBtn = document.getElementById("to-journey-planner-btn");
   if (journeyPlanBtn) {
-    journeyPlanBtn.addEventListener("click", function() {
+    journeyPlanBtn.addEventListener("click", function () {
       // Close the station details window
       document.getElementById("station-popup").style.display = "none";
-      
+
       // Display the "Plan Your Journey" section of the sidebar
       document.getElementById("station-details").style.display = "none";
       document.getElementById("route-details").style.display = "none";
-      
+
       // Ensure the form is visible
       const routePlannerForm = document.getElementById("route-planner-form");
       if (routePlannerForm) {
         routePlannerForm.style.display = "block";
       }
-      
+
       // If there is data for the last selected station, set that station as the starting point
       if (window.lastSelectedStation) {
-        document.getElementById("start-location").value = 
+        document.getElementById("start-location").value =
           window.lastSelectedStation.name || window.lastSelectedStation.Name;
       }
     });
   }
-  
+
   // Add click event to "Back to Station Detail" button
   const backToStationBtn = document.getElementById("journey-planner-btn");
   if (backToStationBtn) {
-    backToStationBtn.addEventListener("click", function() {
+    backToStationBtn.addEventListener("click", function () {
       // Clickable only when the button is enabled
       if (!this.disabled && window.lastSelectedStation) {
         // Close other content
         document.getElementById("route-details").style.display = "none";
-        
+
         // If there is a previously viewed station, redisplay the details popup for that station
         if (window.lastSelectedStation && window.lastSelectedStation.number) {
           fetchDynamicStationData(window.lastSelectedStation.number);
@@ -502,53 +523,55 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
-  
+
   // Add click event to map type toggle button (ensure the button exists)
   const mapViewBtn = document.getElementById("map-view-btn");
   const satelliteViewBtn = document.getElementById("satellite-view-btn");
-  
+
   if (mapViewBtn && satelliteViewBtn && window.map) {
-    mapViewBtn.addEventListener("click", function() {
+    mapViewBtn.addEventListener("click", function () {
       if (window.map) {
         window.map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
         this.style.backgroundColor = "#333";
         satelliteViewBtn.style.backgroundColor = "#555";
       }
     });
-    
-    satelliteViewBtn.addEventListener("click", function() {
+
+    satelliteViewBtn.addEventListener("click", function () {
       if (window.map) {
         window.map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
         this.style.backgroundColor = "#333";
         mapViewBtn.style.backgroundColor = "#555";
       }
     });
-    
+
     console.log("Map type buttons initialized");
   }
-  
+
   // Initialize "Set as Start" button
   const startBtn = document.getElementById("set-as-start-btn");
   if (startBtn) {
-    startBtn.addEventListener("click", function() {
+    startBtn.addEventListener("click", function () {
       if (window.lastSelectedStation) {
-        document.getElementById("start-location").value = window.lastSelectedStation.address;
+        document.getElementById("start-location").value =
+          window.lastSelectedStation.address;
         closeStationPopup();
       }
     });
   }
-  
+
   // Initialize "Set as End" button
   const endBtn = document.getElementById("set-as-end-btn");
   if (endBtn) {
-    endBtn.addEventListener("click", function() {
+    endBtn.addEventListener("click", function () {
       if (window.lastSelectedStation) {
-        document.getElementById("end-location").value = window.lastSelectedStation.address;
+        document.getElementById("end-location").value =
+          window.lastSelectedStation.address;
         closeStationPopup();
       }
     });
   }
-  
+
   console.log("All button event listeners initialized");
 });
 
@@ -578,7 +601,7 @@ window.allStations = [];
 // Function to control filter modal visibility
 function toggleFilterModal() {
   const modal = document.getElementById("filter-modal");
-  
+
   // If the modal is hidden, display it and load the station list
   if (modal.classList.contains("collapsed")) {
     modal.classList.remove("collapsed");
@@ -593,22 +616,22 @@ function toggleFilterModal() {
 // Load station options into the dropdown list
 function loadStationOptions() {
   const stationSelect = document.getElementById("station-select");
-  
+
   // If the dropdown already has options (other than "All Stations"), do not reload
   if (stationSelect.options.length > 1) {
     return;
   }
-  
+
   // Fetch station data from the API
-  fetch("http://localhost:5000/get_all_stations")
-    .then(response => response.json())
-    .then(data => {
+  fetch("/get_all_stations")
+    .then((response) => response.json())
+    .then((data) => {
       if (data.stations && Array.isArray(data.stations)) {
         // Save station data to the global variable
         window.allStations = data.stations;
-        
+
         // Populate the dropdown list
-        data.stations.forEach(station => {
+        data.stations.forEach((station) => {
           const option = document.createElement("option");
           option.value = station.number;
           option.textContent = station.name;
@@ -616,7 +639,7 @@ function loadStationOptions() {
         });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("加载站点数据失败:", error);
     });
 }
@@ -629,7 +652,8 @@ function resetFilters() {
   // Clear the filter results
   const resultsContent = document.querySelector(".results-content");
   if (resultsContent) {
-    resultsContent.innerHTML = '<p class="placeholder-text">Results will be displayed after applying target station and hour...</p>';
+    resultsContent.innerHTML =
+      '<p class="placeholder-text">Results will be displayed after applying target station and hour...</p>';
   }
 }
 
@@ -637,39 +661,43 @@ function resetFilters() {
 function applyFilters() {
   const stationId = document.getElementById("station-select").value;
   const hour = document.getElementById("time-select").value;
-  
+
   // Display loading indicator
   const resultsContent = document.querySelector(".results-content");
   if (resultsContent) {
-    resultsContent.innerHTML = '<p class="placeholder-text">Loading data...</p>';
+    resultsContent.innerHTML =
+      '<p class="placeholder-text">Loading data...</p>';
   }
-  
+
   // Get the current hour for comparison
   const currentHour = new Date().getHours();
-  
+
   // Build the request data
   const requestData = {
     station_id: stationId ? parseInt(stationId, 10) : null,
-    hour: parseInt(hour, 10)
+    hour: parseInt(hour, 10),
   };
-  
+
   // Send the request to the API
-  fetch("http://localhost:5000/predict_availability", {
+  fetch("/predict_availability", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestData)
+    body: JSON.stringify(requestData),
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       // Display the results
       if (resultsContent) {
         if (data.error) {
           resultsContent.innerHTML = `<p class="error-text">${data.error}</p>`;
-        } 
+        }
         // If the response is a string message (e.g., select a past time)
-        else if (typeof data.bikes === 'string' || data.bikes === "Please select a future time.") {
+        else if (
+          typeof data.bikes === "string" ||
+          data.bikes === "Please select a future time."
+        ) {
           resultsContent.innerHTML = `
             <div class="past-time-message">
               <p class="warning-text">${data.bikes}</p>
@@ -687,10 +715,11 @@ function applyFilters() {
         }
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("预测请求失败:", error);
       if (resultsContent) {
-        resultsContent.innerHTML = '<p class="error-text">Failed to get prediction data. Please try again.</p>';
+        resultsContent.innerHTML =
+          '<p class="error-text">Failed to get prediction data. Please try again.</p>';
       }
     });
 }
@@ -700,34 +729,34 @@ function closeStationPopup() {
   const popup = document.getElementById("station-popup");
   if (popup) {
     popup.style.display = "none";
-    
+
     // Important: Do not reset the "Back to Station Detail" button state here
     // Because we want the user to be able to return to the last viewed station via the button
   }
 }
 
 function calculateRoute() {
-  var start = document.getElementById('start-location').value;
-  var destination = document.getElementById('end-location').value;
+  var start = document.getElementById("start-location").value;
+  var destination = document.getElementById("end-location").value;
 
   if (start && destination) {
-      start = start + ', Dublin';
-      destination = destination + ', Dublin';
-     
-      var request = {
-          origin: start,
-          destination: destination,
-          travelMode: google.maps.TravelMode.BICYCLING,  
-      };
+    start = start + ", Dublin";
+    destination = destination + ", Dublin";
 
-      directionsService.route(request, function(response, status) {
-        if (status === google.maps.DirectionsStatus.OK) {
-              directionsRenderer.setDirections(response);
-          } else {
-              alert('Could not find a route between the locations.');
-          }
-      });
+    var request = {
+      origin: start,
+      destination: destination,
+      travelMode: google.maps.TravelMode.BICYCLING,
+    };
+
+    directionsService.route(request, function (response, status) {
+      if (status === google.maps.DirectionsStatus.OK) {
+        directionsRenderer.setDirections(response);
+      } else {
+        alert("Could not find a route between the locations.");
+      }
+    });
   } else {
-      alert('Please enter both start and destination locations.');
+    alert("Please enter both start and destination locations.");
   }
 }
