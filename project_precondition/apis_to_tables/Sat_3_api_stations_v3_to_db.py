@@ -93,7 +93,7 @@ def stationsv3_to_db(text_data, in_engine):
 
 def main():
     USER = "root"
-    PASSWORD = "betty766"
+    PASSWORD = "YOUR_PASSWORD"
     PORT = "3306"
     DB = "se21_local"
     URI = "127.0.0.1"
