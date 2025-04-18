@@ -12,7 +12,7 @@ load_dotenv()
 # 使用dbinfo中的API密钥
 # BIKE_API_KEY = dbinfo.JCKEY
 # CONTRACT = dbinfo.NAME
-# WEATHER_API_KEY = "597b17711b1b951ff3254b78f58df59d"  # 使用dublin_bikes_app.js中的OpenWeatherMap API密钥
+# WEATHER_API_KEY = "YOUR_API_KEY"  # 使用dublin_bikes_app.js中的OpenWeatherMap API密钥
 
 BIKE_API_KEY = os.getenv("b_apiKey")
 CONTRACT = os.getenv("contract")
